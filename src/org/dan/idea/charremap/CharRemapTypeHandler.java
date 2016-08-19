@@ -30,6 +30,9 @@ public class CharRemapTypeHandler implements TypedActionHandler {
         final Document document = editor.getDocument();
         runWriteCommandAction(
                 editor.getProject(),
-                () -> document.insertString(offset, String.valueOf(mappedC)));
+                () -> {
+                    document.insertString(offset, String.valueOf(mappedC));
+                    editor.getCaretModel().moveToOffset(offset + 1);
+                });
     }
 }
