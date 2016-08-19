@@ -1,15 +1,15 @@
 <idea-plugin version="2">
   <id>org.dan.idea.charremap.plugin</id>
-  <name>type-less</name>
+  <name>TypeLess</name>
   <version>0.1</version>
   <vendor email="dyaitskov@gmail.com"
           url="https://github.com/yaitskov">Horns and Hoofs</vendor>
 
   <description><![CDATA[
       <p>
-      The plugin reduce number of keys you need to press while you code in Java,
+      The plugin reduces the number of keys you need to press while you code in Java,
       because it replaces default less frequent characters with more frequent ones.
-      This gains profit more than 4% less keys to be pressed.
+      This gain profit in more than 4% less keys to be pressed.
       Remapping is associative. Now it's just SHIFT inversion for some keys.
       </p>
 
@@ -18,8 +18,7 @@
       and vice versa (<em>(</em> => <em>9</em>)
       </p>
 
-
-      <table>
+      <table border="1" cellpadding="10">
       <tr><td>-</td><td>_</td></tr>
       <tr><td>9</td><td>(</td></tr>
       <tr><td>0</td><td>)</td></tr>
