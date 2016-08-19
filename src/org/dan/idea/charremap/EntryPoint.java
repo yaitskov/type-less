@@ -23,6 +23,7 @@ public class EntryPoint extends AnAction {
                 .add('[', '}')
                 .add(']', '}')
                 .add('0', ')')
+                .add('-', '_')
                 .add('9', '(')
                 .add('\'', '"');
         typedAction.setupHandler(new CharRemapTypeHandler(charMap));
