@@ -30,24 +30,11 @@
   </extensions>
 
   <actions>
-    <action id="EditorBasics.com.dan.EditorIllustration"
-            class="com.dan.EditorIllustration"
-            text="Editor Basics"
-            description="Illustrates how to plug an action in">
-      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-    </action>
-    <action id="EditorBasics.EditorHandlerIllustration"
-            class="org.jetbrains.tutorials.editor.basics.EditorHandlerIllustration"
-            text="Editor Handler"
-            description="Illustrates how to plug an action in">
-      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-    </action>
-    <action id="EditorBasics.LogicalPositionIllustration"
-            class="org.jetbrains.tutorials.editor.basics.EditorAreaIllustration"
-            text="Caret Position"
-            description="Illustrates how editor area is organized">
+    <action id="EditorBasics.org.dan.idea.charremap.EntryPoint"
+            class="org.dan.idea.charremap.EntryPoint"
+            text="Remap Characters"
+            description="Remap Characters">
       <add-to-group group-id="EditorPopupMenu" anchor="first"/>
     </action>
   </actions>
-
 </idea-plugin>
