@@ -1,18 +1,37 @@
 <idea-plugin version="2">
-  <id>com.your.company.unique.plugin.id</id>
-  <name>Plugin display name here</name>
-  <version>1.0</version>
+  <id>org.dan.idea.charremap.plugin</id>
+  <name>type-less</name>
+  <version>0.1</version>
   <vendor email="dyaitskov@gmail.com"
-          url="http://www.yourcompany.com">YourCompany</vendor>
+          url="https://github.com/yaitskov">Horns and Hoofs</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      <p>
+      The plugin reduce number of keys you need to press while you code in Java,
+      because it replaces default less frequent characters with more frequent ones.
+      This gains profit more than 4% less keys to be pressed.
+      Remapping is associative. Now it's just SHIFT inversion for some keys.
+      </p>
+
+      <p>
+      E.g. when you type <em>9</em> as usual <em>(</em> will be inserted
+      and vice versa (<em>(</em> => <em>9</em>)
+      </p>
+
+
+      <table>
+      <tr><td>-</td><td>_</td></tr>
+      <tr><td>9</td><td>(</td></tr>
+      <tr><td>0</td><td>)</td></tr>
+      <tr><td>[</td><td>{</td></tr>
+      <tr><td>]</td><td>}</td></tr>
+      <tr><td>2</td><td>@</td></tr>
+      <tr><td>'</td><td>"</td></tr>
+      </table>
     ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+      <p>Initial release.</p>
     ]]>
   </change-notes>
 
