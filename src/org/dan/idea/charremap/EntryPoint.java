@@ -24,7 +24,7 @@ public class EntryPoint extends AnAction {
         Map<Character, Character> charMap = new HashMap<>();
         new CharMapBuilder(charMap)
                 .add('2', '@')
-                .add('[', '}')
+                .add('[', '{')
                 .add(']', '}')
                 .add('0', ')')
                 .add('-', '_')
