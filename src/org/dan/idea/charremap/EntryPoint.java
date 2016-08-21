@@ -35,9 +35,11 @@ public class EntryPoint extends AnAction {
 
     @Override
     public void actionPerformed(final AnActionEvent anActionEvent) {
+        // is not called
     }
 
     @Override
-    public void update(final AnActionEvent e) {
+    public void update(final AnActionEvent anActionEvent) {
+        // is not called
     }
 }
