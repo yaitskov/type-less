@@ -30,7 +30,9 @@ public class EntryPoint extends AnAction {
                 .add('-', '_')
                 .add('9', '(')
                 .add('\'', '"');
-        typedAction.setupHandler(new CharRemapTypeHandler(charMap));
+        TypedActionHandler forward = typedAction.getHandler();
+        logger.info("Decorate handler {}", forward);
+        typedAction.setupHandler(new CharRemapTypeHandler(charMap, forward));
     }
 
     @Override
