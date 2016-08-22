@@ -29,6 +29,8 @@ public class EntryPoint extends AnAction {
                 .add('0', ')')
                 .add('-', '_')
                 .add('9', '(')
+                .add('`', '~')
+                .add('\\', '|')
                 .add('\'', '"');
         TypedActionHandler forward = typedAction.getHandler();
         logger.info("Decorate handler {}", forward);
