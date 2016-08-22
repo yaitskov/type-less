@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dan.idea.charremap.plugin</id>
   <name>TypeLess</name>
-  <version>0.1</version>
+  <version>0.2</version>
   <vendor email="dyaitskov@gmail.com"
           url="https://github.com/yaitskov">Horns and Hoofs</vendor>
 
@@ -26,10 +26,18 @@
       <tr><td>]</td><td>}</td></tr>
       <tr><td>2</td><td>@</td></tr>
       <tr><td>'</td><td>"</td></tr>
+      <tr><td>`</td><td>~</td></tr>
+      <tr><td>\</td><td>|</td></tr>
       </table>
     ]]></description>
 
   <change-notes><![CDATA[
+      <h1>0.2</h1>
+      <p>Retrieve suggestions for auto-completion.</p>
+      <p>Fix mapping of '{'.</p>
+      <p>Map '~' and '|' keys.</p>
+
+      <h1>0.1</h1>
       <p>Initial release.</p>
     ]]>
   </change-notes>
