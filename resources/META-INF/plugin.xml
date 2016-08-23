@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dan.idea.charremap.plugin</id>
   <name>TypeLess</name>
-  <version>0.2</version>
+  <version>0.3</version>
   <vendor email="dyaitskov@gmail.com"
           url="https://github.com/yaitskov">Horns and Hoofs</vendor>
 
@@ -29,9 +29,30 @@
       <tr><td>`</td><td>~</td></tr>
       <tr><td>\</td><td>|</td></tr>
       </table>
+
+      <p>Letter after @ is upcased.</p>
+      <p>Lambda delimiter of arguments and the body is recognized.</p>
+      <p>Replace "{" with "[" right after letter or digit, and "}" after "["
+         (Variable with array type like "String[]").</p>
+      <p>Replace "_" with "-" right after space or closing brace.</p>
+      <p>Replace "," with "&lt;" right after letter.</p>
+      <p>Replace "." with "&gt;" right after letter if the line has "&lt;" before.</p>
+      <p>Replace "1=" with "!= ".</p>
+      <p>Replace "LETTER&lt;SPACE" with "LETTER,SPACE".</p>
+
     ]]></description>
 
   <change-notes><![CDATA[
+      <h1>0.3</h1>
+      <p>Replace "-." with "-> " and upcase letter after "@"</p>
+      <p>Replace "{" with "[" right after letter or digit, and "}" after "["
+         (Variable with array type like "String[]").</p>
+      <p>Replace "_" with "-" right after space or closing brace.</p>
+      <p>Replace "," with "&lt;" right after letter.</p>
+      <p>Replace "." with "&gt;" right after letter if the line has "&lt;" before.</p>
+      <p>Replace "1=" with "!= ".</p>
+      <p>Replace "LETTER&lt;SPACE" with "LETTER,SPACE".</p>
+
       <h1>0.2</h1>
       <p>Retrieve suggestions for auto-completion.</p>
       <p>Fix mapping of '{'.</p>

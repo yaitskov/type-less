@@ -1,9 +1,18 @@
 package org.dan.idea.charremap;
 
+import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
+import static java.lang.Character.isLetter;
+import static java.lang.Character.isLetterOrDigit;
+import static java.lang.Character.isLowerCase;
+import static java.lang.Character.toUpperCase;
+
 import java.util.Map;
 
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.editor.CaretModel;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -21,11 +30,79 @@ public class CharRemapTypeHandler implements TypedActionHandler {
 
     @Override
     public void execute(@NotNull Editor editor, char c, @NotNull DataContext dataContext) {
+        final char map = map(editor, c);
+        if (map == 0) {
+            return;
+        }
+        forward.execute(editor, map, dataContext);
+    }
+
+    private char map(@NotNull Editor editor, char c) {
         final char mappedC = charMap.getOrDefault(c, c);
-        final int offset = editor.getCaretModel().getOffset();
+        CaretModel caret = editor.getCaretModel();
+        final int offset = caret.getOffset();
+        final LogicalPosition lpos = editor.offsetToLogicalPosition(offset);
         if (mappedC != c) {
             logger.info("Map character [{}] => [{}] at offset [{}]", c, mappedC, offset);
         }
-        forward.execute(editor, mappedC, dataContext);
+        final Document document = editor.getDocument();
+        if (offset > 0) {
+            final String content = document.getText();
+            final char prevChar = content.charAt(offset - 1);
+            if (isLowerCase(mappedC) && prevChar == '@') {
+                return toUpperCase(mappedC);
+            }
+            if (offset > 1) {
+                char p2Char = content.charAt(offset - 2);
+                if (mappedC == '@' && ((prevChar != ' ' && prevChar != '(') || p2Char != ' ')) {
+                    return '2';
+                }
+                if (mappedC == ' ' && prevChar == '<' && isLetter(p2Char)) {
+                    runWriteCommandAction(
+                            editor.getProject(),
+                            () -> {
+                                document.replaceString(offset - 1, offset, ", ");
+                                caret.moveToOffset(offset + 1);
+                            });
+                    return 0;
+                }
+            }
+            if (mappedC == '=' && prevChar == '1') {
+                runWriteCommandAction(
+                        editor.getProject(),
+                        () -> {
+                            document.replaceString(offset - 1, offset, "!= ");
+                            caret.moveToOffset(offset + 2);
+                        });
+                return 0;
+            }
+            if (mappedC == '.' && prevChar == '-') {
+                runWriteCommandAction(
+                        editor.getProject(),
+                        () -> {
+                            document.replaceString(offset - 1, offset, "-> ");
+                            caret.moveToOffset(offset + 2);
+                        });
+                return 0;
+            }
+            if (mappedC == '{' && isLetterOrDigit(prevChar)) {
+                return '[';
+            }
+            if (mappedC == '}' && prevChar == '[') {
+                return ']';
+            }
+            if (mappedC == '_' && (prevChar == ' ' || prevChar == ')')) {
+                return '-';
+            }
+            if (mappedC == ',' && isLetter(prevChar)) {
+                return '<';
+            }
+            if (mappedC == '.'
+                    && isLetter(prevChar)
+                    && content.substring(offset - lpos.column, offset).contains("<")) {
+                return '>';
+            }
+        }
+        return mappedC;
     }
 }
