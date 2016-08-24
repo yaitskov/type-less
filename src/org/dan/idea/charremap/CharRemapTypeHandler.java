@@ -4,10 +4,14 @@ import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAct
 import static java.lang.Character.isLetter;
 import static java.lang.Character.isLetterOrDigit;
 import static java.lang.Character.isLowerCase;
+import static java.lang.Character.isUpperCase;
 import static java.lang.Character.toUpperCase;
 
 import java.util.Map;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
@@ -49,12 +53,17 @@ public class CharRemapTypeHandler implements TypedActionHandler {
         if (offset > 0) {
             final String content = document.getText();
             final char prevChar = content.charAt(offset - 1);
-            if (isLowerCase(mappedC) && prevChar == '@') {
-                return toUpperCase(mappedC);
+            if (prevChar == '@') {
+                if (isLowerCase(mappedC)) {
+                    return toUpperCase(mappedC);
+                } else if (isUpperCase(mappedC)) {
+                    showInfo("Redundant SHIFT key pressed",
+                            "Letters right after '@' are upcased automatically");
+                }
             }
             if (offset > 1) {
                 char p2Char = content.charAt(offset - 2);
-                if (mappedC == '@' && ((prevChar != ' ' && prevChar != '(') || p2Char != ' ')) {
+                if (mappedC == '2' && ((prevChar != ' ' && prevChar != '(') || p2Char != ' ')) {
                     return '2';
                 }
                 if (mappedC == ' ' && prevChar == '<' && isLetter(p2Char)) {
@@ -104,5 +113,11 @@ public class CharRemapTypeHandler implements TypedActionHandler {
             }
         }
         return mappedC;
+    }
+
+    private void showInfo(String title, String content) {
+        Notifications.Bus.notify(new Notification("TypeLess",
+                title, content,
+                NotificationType.INFORMATION));
     }
 }
