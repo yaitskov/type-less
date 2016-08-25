@@ -77,7 +77,7 @@
   </extensions>
 
   <actions>
-    <action id="EditorBasics.org.dan.idea.charremap.EntryPoint"
+    <action id="TypeLess.org.dan.idea.charremap.EntryPoint"
             class="org.dan.idea.charremap.EntryPoint"
             text="Remap Characters"
             description="Remap Characters">

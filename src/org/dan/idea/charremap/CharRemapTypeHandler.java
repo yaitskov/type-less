@@ -9,15 +9,18 @@ import static java.lang.Character.toUpperCase;
 
 import java.util.Map;
 
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
+import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,12 +36,17 @@ public class CharRemapTypeHandler implements TypedActionHandler {
     }
 
     @Override
-    public void execute(@NotNull Editor editor, char c, @NotNull DataContext dataContext) {
-        final char map = map(editor, c);
-        if (map == 0) {
-            return;
+    public void execute(@NotNull Editor editor, char c, @NotNull DataContext dc) {
+        PsiFile pf = dc.getData(PlatformDataKeys.PSI_FILE);
+        if (pf.getLanguage().is(JavaLanguage.INSTANCE)) {
+            final char map = map(editor, c);
+            if (map == 0) {
+                return;
+            }
+            forward.execute(editor, map, dc);
+        } else {
+            forward.execute(editor, c, dc);
         }
-        forward.execute(editor, map, dataContext);
     }
 
     private char map(@NotNull Editor editor, char c) {
