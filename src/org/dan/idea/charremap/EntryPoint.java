@@ -21,17 +21,17 @@ public class EntryPoint extends AnAction {
         logger.info("Init Type-Less");
         final EditorActionManager actionManager = EditorActionManager.getInstance();
         final TypedAction typedAction = actionManager.getTypedAction();
-        Map<Character, Character> charMap = new HashMap<>();
+        Map<Character, Mapper> charMap = new HashMap<>();
         new CharMapBuilder(charMap)
-                .add('2', '@')
-                .add('[', '{')
-                .add(']', '}')
-                .add('0', ')')
-                .add('-', '_')
-                .add('9', '(')
-                .add('`', '~')
-                .add('\\', '|')
-                .add('\'', '"');
+                .bind('2', '@')
+                .bind('[', '{')
+                .bind(']', '}')
+                .bind('0', ')')
+                .bind('-', '_')
+                .bind('9', '(')
+                .bind('`', '~')
+                .bind('\\', '|')
+                .bind('\'', '"');
         TypedActionHandler forward = typedAction.getHandler();
         logger.info("Decorate handler {}", forward);
         typedAction.setupHandler(new CharRemapTypeHandler(charMap, forward));
