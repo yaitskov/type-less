@@ -1,4 +1,4 @@
-package org.dan.idea.charremap;
+package org.dan.idea.charremap.key;
 
 import static java.util.Optional.of;
 
@@ -13,6 +13,8 @@ import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
+import org.dan.idea.charremap.CharEvent;
+import org.dan.idea.charremap.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

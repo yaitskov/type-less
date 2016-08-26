@@ -9,6 +9,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.actionSystem.EditorActionManager;
 import com.intellij.openapi.editor.actionSystem.TypedAction;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
+import org.dan.idea.charremap.key.NumberTwoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
