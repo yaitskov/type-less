@@ -1,0 +1,112 @@
+
+0 => (
+9 => )
+shift 0 => 0
+shift 9 => 9
+
+[ => {
+] => }
+
+- => _
+
+2 => @
+
+' => "
+
+pojo class
+
+
+class Pojo {
+  s fieldName; // ==> private String fieldName;
+  = fieldName; // ==> @Getter @Setter private String fieldName;
+
+
+}
+
+case 3; //  ==> case 3:\n
+
+if (x 1= // ==> if (x !=
+^ *if  // ==> if (
+
+if (...) // ==> if (...) {\n
+_
+}
+
+some-name = // ==> private static final SOME_NAME =
+static final super-const-name // ==> static final SUPER_CONST_NAME
+
+static final SUPER_CONST_NAME = ' // ==> static final String SUPER_CONST_NAME = "
+
+static final String SUPER_CONST_NAME = "asdfasd fasdf ' // => static final String SUPER_CONST_NAME = "asdfasd fasdf ";
+
+
+string function-x9 // ==> public String functionX(
+
+
+2xd => @Xd
+
+@A\n
+b     ==>  @A
+@B show suggestion
+
+
+List, ==> List<>
+
+
+"a_b-  => "a_b_
+
+
+static final => upcase
+
+
+"ad-add-or-update-source"
+delete - and a insert A (delete upcase)
+when cursor moves to  repe
+
+
+        config.setNetbios(msg.getNetbios());
+        config.setFqdn(msg.getFqdn());
+        config.
+
+repeat prefix
+
+
+
+-----------------------------------------------------------------------------------
+  Characters requiring Shift: ~ : @ ! $ % ^ & * ( ) _ + | { } ? < > "
+
+1. char "~" all the time because "`" is not used at all.
+   just revert Shift for key "`"
+2. char ":"
+   2.1 after label identficator right before loop (one word statement)
+   2.2 after case "case 888:
+3. char "@"
+
+
+------------
+use matcing public static final fields for auto completion
+check instance of and generic
+
+
+objecttype 1= ==> objectype != null
+es
+
+
+backspace on right side or delete on the left side of identifier = remove whole ide
+
+
+int or long type .. ==> int or long type >> ==>   bits <<
+
+<, ==> <<
+
+int , ==> int <
+
+"3" " " "65"   =>   "3" " " "^" "5"
+          |space
+
+upcase after digit into a indentifier name
+
+
+obj.getAaaa()  del and there is a vairable aaaa ==> aaaa
+
+Delete |"volumesSerialize = objectMapper.writeValueAsString(" ==> remove "volumesSerialize ="
