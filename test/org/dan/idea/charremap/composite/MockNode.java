@@ -1,7 +1,8 @@
 package org.dan.idea.charremap.composite;
 
+import java.util.ArrayList;
+
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -10,16 +11,19 @@ import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class NullAstNode implements ASTNode {
-    public static final NullAstNode NULL_AST_NODE = new NullAstNode();
-    public static final IElementType NULL_ELEMENT_TYPE = new IElementType("null-terminator", Language.ANY);
+public class MockNode implements ASTNode {
+    private final IElementType type;
+    private ASTNode parent;
+    private final ArrayList<ASTNode> children = new ArrayList<>();
 
-    private NullAstNode() {}
+    public MockNode(IElementType type) {
+        this.type = type;
+    }
 
     @NotNull
     @Override
     public IElementType getElementType() {
-        return NULL_ELEMENT_TYPE;
+        return type;
     }
 
     @NotNull
@@ -56,27 +60,27 @@ public class NullAstNode implements ASTNode {
 
     @Override
     public ASTNode getTreeParent() {
-        return NULL_AST_NODE;
+        return parent;
     }
 
     @Override
     public ASTNode getFirstChildNode() {
-        return null;
+        throw new IllegalStateException();
     }
 
     @Override
     public ASTNode getLastChildNode() {
-        return null;
+        throw new IllegalStateException();
     }
 
     @Override
     public ASTNode getTreeNext() {
-        return null;
+        throw new IllegalStateException();
     }
 
     @Override
     public ASTNode getTreePrev() {
-        return null;
+        throw new IllegalStateException();
     }
 
     @NotNull
@@ -85,18 +89,24 @@ public class NullAstNode implements ASTNode {
         return new ASTNode[0];
     }
 
+    public void addChild(@NotNull MockNode astNode) {
+        astNode.parent = this;
+        children.add(astNode);
+    }
+
     @Override
     public void addChild(@NotNull ASTNode astNode) {
-
+        throw new IllegalStateException();
     }
 
     @Override
     public void addChild(@NotNull ASTNode astNode, @Nullable ASTNode astNode1) {
-
+        throw new IllegalStateException();
     }
 
     @Override
     public void addLeaf(@NotNull IElementType iElementType, CharSequence charSequence, @Nullable ASTNode astNode) {
+        throw new IllegalStateException();
 
     }
 
