@@ -22,6 +22,7 @@ public class Plus implements Matcher {
             while (expectedElement == matcherState.type()) {
                 matcherState.next();
             }
+            return true;
         }
         return false;
     }
