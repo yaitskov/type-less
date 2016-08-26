@@ -1,12 +1,12 @@
 package org.dan.idea.charremap.key;
 
 import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.JAVA_FILE;
-import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.METHOD;
-import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.PARAMETER;
-import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.PARAMETER_LIST;
 import static com.intellij.psi.impl.source.tree.JavaElementType.CLASS;
 import static com.intellij.psi.impl.source.tree.JavaElementType.FIELD;
+import static com.intellij.psi.impl.source.tree.JavaElementType.METHOD;
 import static com.intellij.psi.impl.source.tree.JavaElementType.MODIFIER_LIST;
+import static com.intellij.psi.impl.source.tree.JavaElementType.PARAMETER;
+import static com.intellij.psi.impl.source.tree.JavaElementType.PARAMETER_LIST;
 import static java.util.Optional.of;
 import static org.dan.idea.charremap.composite.Any.any;
 import static org.dan.idea.charremap.composite.Maybe.maybe;
@@ -17,6 +17,7 @@ import static org.dan.idea.charremap.composite.Or.or;
 import static org.dan.idea.charremap.composite.Plus.plus;
 import static org.dan.idea.charremap.composite.PrevChar.prevChar;
 import static org.dan.idea.charremap.composite.Seq.seq;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +31,27 @@ import org.dan.idea.charremap.Mapper;
 import org.dan.idea.charremap.Matcher;
 import org.dan.idea.charremap.MatcherState;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class NumberTwoMapper implements Mapper {
-    private static final Logger logger = LoggerFactory.getLogger(NumberTwoMapper.class);
+public abstract class MatcherMapper implements Mapper {
+    private static final Logger logger = getLogger(MatcherMapper.class);
+
+    public static Matcher AT_MATCHER = seq(WS,
+            or(
+                    seq(one(FIELD), plus(CLASS)),
+                    seq(maybe(PARAMETER), one(PARAMETER_LIST),
+                            one(METHOD), plus(CLASS)),
+                    seq(maybe(MODIFIER_LIST), any(CLASS))),
+            one(JAVA_FILE),
+            not(prevChar(Character::isJavaIdentifierPart)));
+
+    public static List<IElementType> types(ASTNode node) {
+        List<IElementType> result = new ArrayList<>();
+        while (node != null) {
+            result.add(node.getElementType());
+            node = node.getTreeParent();
+        }
+        return result;
+    }
 
     @Override
     public Optional<Character> apply(CharEvent ce) {
@@ -45,30 +63,13 @@ public class NumberTwoMapper implements Mapper {
             return of(ce.origin);
         }
         logger.info("Path to current element [{}]\nnext [{}]\nprev [{}}",
-                types(elementAt.getNode()),
-                types(elementAt.getNode().getTreeNext()),
-                types(elementAt.getNode().getTreePrev()));
+                MatcherMapper.types(elementAt.getNode()),
+                MatcherMapper.types(elementAt.getNode().getTreeNext()),
+                MatcherMapper.types(elementAt.getNode().getTreePrev()));
         String docText = ce.editor.getDocument().getText();
         MatcherState state = new MatcherState(docText, offset, elementAt.getNode());
-        Matcher m = seq(WS,
-                or(
-                        seq(one(FIELD), plus(CLASS)),
-                        seq(maybe(PARAMETER), one(PARAMETER_LIST), one(METHOD), plus(CLASS)),
-                        seq(maybe(MODIFIER_LIST), any(CLASS))),
-                one(JAVA_FILE),
-                not(prevChar(Character::isJavaIdentifierPart)));
-        if (m.test(state)) {
-            return of('@');
-        }
-        return of(ce.origin);
+        return map(state);
     }
 
-    public static List<IElementType> types(ASTNode node) {
-        List<IElementType> result = new ArrayList<>();
-        while (node != null) {
-            result.add(node.getElementType());
-            node = node.getTreeParent();
-        }
-        return result;
-    }
+    protected abstract Optional<Character> map(MatcherState state);
 }
