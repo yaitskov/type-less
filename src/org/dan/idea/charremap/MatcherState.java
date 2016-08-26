@@ -33,4 +33,8 @@ public class MatcherState {
     public ASTNode getNode() {
         return node;
     }
+
+    public void setNode(ASTNode node) {
+        this.node = node;
+    }
 }
