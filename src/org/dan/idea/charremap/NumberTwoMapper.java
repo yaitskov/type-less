@@ -13,8 +13,12 @@ import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NumberTwoMapper implements Mapper {
+    private static final Logger logger = LoggerFactory.getLogger(NumberTwoMapper.class);
+
     @Override
     public Optional<Character> apply(CharEvent ce) {
         PsiElement root = ce.pf.getNode().getPsi();
@@ -24,7 +28,10 @@ public class NumberTwoMapper implements Mapper {
         if (elementAt == null) {
             return of(ce.origin);
         }
-
+        logger.info("Path to current element [{}]\nnext [{}]\nprev [{}}",
+                types(elementAt.getNode()),
+                types(elementAt.getNode().getTreeNext()),
+                types(elementAt.getNode().getTreePrev()));
         if (match(elementAt, TokenType.WHITE_SPACE, JavaStubElementTypes.JAVA_FILE)
                 || (match(elementAt, TokenType.WHITE_SPACE,
                 JavaElementType.MODIFIER_LIST,
