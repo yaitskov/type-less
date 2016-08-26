@@ -42,7 +42,7 @@ public class CharRemapTypeHandler implements TypedActionHandler {
     public void execute(@NotNull Editor editor, char c, @NotNull DataContext dc) {
         PsiFile pf = dc.getData(PlatformDataKeys.PSI_FILE);
         if (pf.getLanguage().is(JavaLanguage.INSTANCE)) {
-            final Optional<Character> mapped = map(new CharEvent(c, dc, editor));
+            final Optional<Character> mapped = map(new CharEvent(c, dc, editor, pf));
             if (mapped.isPresent()) {
                 forward.execute(editor, mapped.get(), dc);
             }

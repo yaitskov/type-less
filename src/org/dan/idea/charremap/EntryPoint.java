@@ -23,7 +23,7 @@ public class EntryPoint extends AnAction {
         final TypedAction typedAction = actionManager.getTypedAction();
         Map<Character, Mapper> charMap = new HashMap<>();
         new CharMapBuilder(charMap)
-                .bind('2', '@')
+                .bind('2', new NumberTwoMapper())
                 .bind('[', '{')
                 .bind(']', '}')
                 .bind('0', ')')
