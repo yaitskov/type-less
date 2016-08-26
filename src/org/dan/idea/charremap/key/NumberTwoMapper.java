@@ -1,20 +1,28 @@
 package org.dan.idea.charremap.key;
 
+import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.JAVA_FILE;
+import static com.intellij.psi.impl.source.tree.JavaElementType.CLASS;
+import static com.intellij.psi.impl.source.tree.JavaElementType.MODIFIER_LIST;
 import static java.util.Optional.of;
+import static org.dan.idea.charremap.composite.Any.any;
+import static org.dan.idea.charremap.composite.Maybe.maybe;
+import static org.dan.idea.charremap.composite.Not.not;
+import static org.dan.idea.charremap.composite.One.WS;
+import static org.dan.idea.charremap.composite.One.one;
+import static org.dan.idea.charremap.composite.PrevChar.prevChar;
+import static org.dan.idea.charremap.composite.Seq.seq;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.TokenType;
-import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
-import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import org.dan.idea.charremap.CharEvent;
 import org.dan.idea.charremap.Mapper;
+import org.dan.idea.charremap.Matcher;
+import org.dan.idea.charremap.MatcherState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,44 +42,14 @@ public class NumberTwoMapper implements Mapper {
                 types(elementAt.getNode()),
                 types(elementAt.getNode().getTreeNext()),
                 types(elementAt.getNode().getTreePrev()));
-        if (match(elementAt, TokenType.WHITE_SPACE, JavaStubElementTypes.JAVA_FILE)
-                || (match(elementAt, TokenType.WHITE_SPACE,
-                JavaElementType.MODIFIER_LIST,
-                JavaElementType.CLASS,
-                JavaStubElementTypes.JAVA_FILE)
-                ) && previousChar(ce, c -> !Character.isJavaIdentifierPart(c))
-                || (match(elementAt, TokenType.WHITE_SPACE,
-                JavaElementType.CLASS,
-                JavaElementType.CLASS,
-                JavaStubElementTypes.JAVA_FILE)
-        ) && previousChar(ce, c -> !Character.isJavaIdentifierPart(c))
-                || (match(elementAt, TokenType.WHITE_SPACE,
-                JavaElementType.CLASS,
-                JavaStubElementTypes.JAVA_FILE)
-        ) && previousChar(ce, c -> !Character.isJavaIdentifierPart(c))) {
+        String docText = ce.editor.getDocument().getText();
+        MatcherState state = new MatcherState(docText, offset, elementAt.getNode());
+        Matcher m = seq(WS, maybe(MODIFIER_LIST), any(CLASS), one(JAVA_FILE),
+                not(prevChar(Character::isJavaIdentifierPart)));
+        if (m.test(state)) {
             return of('@');
         }
         return of(ce.origin);
-
-    }
-
-    public static boolean previousChar(CharEvent ce, Predicate<Character> p) {
-        int offset = ce.editor.getCaretModel().getOffset();
-        return offset > 0 && p.test(ce.editor.getDocument().getText().charAt(offset - 1));
-    }
-
-    public static boolean match(PsiElement element, IElementType... types) {
-        ASTNode node = element.getNode();
-        for (IElementType type : types) {
-            if (node == null) {
-                return false;
-            }
-            if (node.getElementType() != type) {
-                return false;
-            }
-            node = node.getTreeParent();
-        }
-        return true;
     }
 
     public static List<IElementType> types(ASTNode node) {
