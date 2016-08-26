@@ -4,10 +4,8 @@ import static com.intellij.psi.TokenType.NEW_LINE_INDENT;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static org.dan.idea.charremap.MatcherState.of;
 import static org.dan.idea.charremap.composite.Any.ANY_WS;
-import static org.dan.idea.charremap.composite.One.WS;
 import static org.dan.idea.charremap.composite.Util.seqUp;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.intellij.lang.ASTNode;
