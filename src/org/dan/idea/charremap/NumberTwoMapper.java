@@ -37,7 +37,16 @@ public class NumberTwoMapper implements Mapper {
                 JavaElementType.MODIFIER_LIST,
                 JavaElementType.CLASS,
                 JavaStubElementTypes.JAVA_FILE)
-                ) && previousChar(ce, c -> !Character.isJavaIdentifierPart(c))) {
+                ) && previousChar(ce, c -> !Character.isJavaIdentifierPart(c))
+                || (match(elementAt, TokenType.WHITE_SPACE,
+                JavaElementType.CLASS,
+                JavaElementType.CLASS,
+                JavaStubElementTypes.JAVA_FILE)
+        ) && previousChar(ce, c -> !Character.isJavaIdentifierPart(c))
+                || (match(elementAt, TokenType.WHITE_SPACE,
+                JavaElementType.CLASS,
+                JavaStubElementTypes.JAVA_FILE)
+        ) && previousChar(ce, c -> !Character.isJavaIdentifierPart(c))) {
             return of('@');
         }
         return of(ce.origin);
