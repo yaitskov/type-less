@@ -1,19 +1,8 @@
 package org.dan.idea.charremap.key;
 
-import static com.intellij.ide.highlighter.JavaFileType.INSTANCE;
-
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
-import org.dan.idea.charremap.Mappers;
-import org.dan.idea.charremap.RootMapper;
-import org.dan.idea.charremap.mock.MockIde;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.LoggerFactory;
-
-public class AtMatcherTest extends LightPlatformCodeInsightFixtureTestCase {
-    static {
-        LoggerFactory.getLogger(AtMatcherTest.class).info("init 12312312");
+public class AtMatcherTest extends BaseMatcherTest {
+    public AtMatcherTest() {
+        super('2', '@');
     }
 
     public void testTopClassNoAnnotations() {
@@ -90,27 +79,5 @@ public class AtMatcherTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testTopClassInAnnotation() {
         checkNo(1, "@Deprecated\nclass A {}\n");
-    }
-
-    @NotNull
-    private MockIde makeIde(char c, int offset, String text) {
-        PsiFile pf = PsiFileFactory.getInstance(getProject())
-                .createFileFromText("A.java", INSTANCE, text);
-        return new MockIde(text, offset, pf.findElementAt(offset).getNode(), c);
-    }
-
-    private void checkYes(int offset, String text) {
-        check('2', '@', offset, text);
-    }
-
-    private void checkNo(int offset, String text) {
-        check('2', '2', offset, text);
-    }
-
-    private void check(char in, char out, int offset, String text) {
-        assertEquals(out, new RootMapper(Mappers.CHAR_MAP)
-                .apply(makeIde(in, offset, text))
-                .get()
-                .charValue());
     }
 }
