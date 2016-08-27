@@ -1,5 +1,7 @@
 package org.dan.idea.charremap.key;
 
+import static java.util.Optional.of;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +24,8 @@ public abstract class MatcherMapper implements Mapper {
 
     @Override
     public Optional<Character> apply(IdeFacade ide) {
-        return map(new MatcherState(ide.text(), ide.offset(), ide.eventNode()));
+        return of(map(new MatcherState(ide.text(), ide.offset(), ide.eventNode()))
+                .orElse(ide.eventChar()));
     }
 
     protected abstract Optional<Character> map(MatcherState state);

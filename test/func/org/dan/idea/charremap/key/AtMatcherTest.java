@@ -15,6 +15,14 @@ public class AtMatcherTest extends LightPlatformCodeInsightFixtureTestCase {
         check(1, "\n\nclass A {}\n");
     }
 
+    public void testTopClassNoAnnotationsFirstChar() {
+        check(0, "\n\nclass A {}\n");
+    }
+
+    public void testTopClassTouchIdAhead() {
+        check('2', '2', 0, "class A {}\n");
+    }
+
     @NotNull
     private MockIde makeIde(char c, int offset, String text) {
         PsiFile pf = PsiFileFactory.getInstance(getProject())
@@ -23,8 +31,12 @@ public class AtMatcherTest extends LightPlatformCodeInsightFixtureTestCase {
     }
 
     private void check(int offset, String text) {
-        assertEquals('@', new RootMapper(Mappers.CHAR_MAP)
-                .apply(makeIde('2', offset, text))
+        check('2', '@', offset, text);
+    }
+
+    private void check(char in, char out, int offset, String text) {
+        assertEquals(out, new RootMapper(Mappers.CHAR_MAP)
+                .apply(makeIde(in, offset, text))
                 .get()
                 .charValue());
     }
