@@ -13,6 +13,8 @@ import static com.intellij.psi.JavaTokenType.PRIVATE_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PROTECTED_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PUBLIC_KEYWORD;
 import static com.intellij.psi.JavaTokenType.RPARENTH;
+import static com.intellij.psi.JavaTokenType.STATIC_KEYWORD;
+import static com.intellij.psi.JavaTokenType.VOLATILE_KEYWORD;
 import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.JAVA_FILE;
 import static com.intellij.psi.impl.source.tree.JavaElementType.ANNOTATION;
 import static com.intellij.psi.impl.source.tree.JavaElementType.ANONYMOUS_CLASS;
@@ -59,6 +61,8 @@ public class Matchers {
                     seq(or(one(PRIVATE_KEYWORD),
                             one(PUBLIC_KEYWORD),
                             one(PROTECTED_KEYWORD),
+                            one(VOLATILE_KEYWORD),
+                            one(STATIC_KEYWORD),
                             one(FINAL_KEYWORD)),
                             O_MODIFIER_LIST,
                             maybe(or(PAR_PAR_LIST_METHOD,

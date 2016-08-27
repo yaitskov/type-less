@@ -69,6 +69,14 @@ public class AtMatcherTest extends BaseMatcherTest {
         checkYes(10, "class A { int x; }\n");
     }
 
+    public void testStaticFieldNoAnnotationTouch() {
+        checkYes(10, "class A { static int x; }\n");
+    }
+
+    public void testVolatileFieldNoAnnotationTouch() {
+        checkYes(10, "class A { volatile int x; }\n");
+    }
+
     public void testMethodNoAnnotationTouchIntType() {
         checkYes(10, "class A { int x() { return 0; } }\n");
     }
@@ -79,6 +87,10 @@ public class AtMatcherTest extends BaseMatcherTest {
 
     public void testMethodNoAnnotationTouchPublic() {
         checkYes(10, "class A { public String x() { return null; } }\n");
+    }
+
+    public void testMethodNoAnnotationTouchStatic() {
+        checkYes(10, "class A { static String x() { return null; } }\n");
     }
 
     public void testAnonymousClassMethodNoAnnotationTouchPublic() {
@@ -103,6 +115,18 @@ public class AtMatcherTest extends BaseMatcherTest {
 
     public void testSubClassMethodNoAnnotationTouchPublic() {
         checkYes(20, "class A { class B { public String x() { return null; } } }\n");
+    }
+
+    public void testStaticSubClassMethodNoAnnotationTouchPublic() {
+        checkYes(27, "class A { static class B { public String x() { return null; } } }\n");
+    }
+
+    public void testFinalSubClassMethodNoAnnotationTouchPublic() {
+        checkYes(26, "class A { final class B { public String x() { return null; } } }\n");
+    }
+
+    public void testPublicSubClassMethodNoAnnotationTouchPublic() {
+        checkYes(27, "class A { public class B { public String x() { return null; } } }\n");
     }
 
     public void testSubClassMethodNoAnnotationTouchFinal() {
