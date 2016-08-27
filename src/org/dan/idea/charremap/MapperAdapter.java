@@ -14,7 +14,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.TypedActionHandler;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import org.dan.idea.charremap.key.MatcherMapper;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -51,11 +50,15 @@ public class MapperAdapter implements TypedActionHandler {
         }
         final ASTNode node = elementAt.getNode();
         IdeFacade ide = new IdeFacadeImpl(c, node, editor);
+        logPaths(c, node);
+        return mapper.apply(ide);
+    }
+
+    public static void logPaths(char c, ASTNode node) {
         logger.info("{}) current [{}]\nnext [{}]\nprev [{}]",
                 c,
                 types(node),
                 types(node.getTreeNext()),
                 types(node.getTreePrev()));
-        return mapper.apply(ide);
     }
 }

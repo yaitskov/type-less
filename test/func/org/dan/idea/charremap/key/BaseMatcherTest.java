@@ -1,8 +1,10 @@
 package org.dan.idea.charremap.key;
 
 import static com.intellij.ide.highlighter.JavaFileType.INSTANCE;
+import static org.dan.idea.charremap.MapperAdapter.logPaths;
 import static org.slf4j.LoggerFactory.getLogger;
 
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
@@ -25,9 +27,11 @@ public class BaseMatcherTest extends LightPlatformCodeInsightFixtureTestCase {
 
     @NotNull
     protected MockIde makeIde(char c, int offset, String text) {
-        PsiFile pf = PsiFileFactory.getInstance(getProject())
+        final PsiFile pf = PsiFileFactory.getInstance(getProject())
                 .createFileFromText("A.java", INSTANCE, text);
-        return new MockIde(text, offset, pf.findElementAt(offset).getNode(), c);
+        final ASTNode node = pf.findElementAt(offset).getNode();
+        logPaths(c, node);
+        return new MockIde(text, offset, node, c);
     }
 
     protected void checkYes(int offset, String text) {
