@@ -57,8 +57,20 @@ public class AtMatcherTest extends BaseMatcherTest {
         checkYes(9, "class A { int x; }\n");
     }
 
-    public void testFieldNoAnnotationTouchType() {
+    public void testFieldNoAnnotationTouchIntType() {
         checkYes(10, "class A { int x; }\n");
+    }
+
+    public void testFieldNoAnnotationTouchStringType() {
+        checkYes(10, "class A { String x; }\n");
+    }
+
+    public void testFieldNoAnnotationTouchPrivate() {
+        checkYes(10, "class A { private int x; }\n");
+    }
+
+    public void testFieldNoAnnotationTouchFinal() {
+        checkYes(10, "class A { final int x = 1; }\n");
     }
 
     public void testMethodNoAnnotationAroundSpaces() {
