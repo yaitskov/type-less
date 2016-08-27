@@ -89,6 +89,10 @@ public class AtMatcherTest extends BaseMatcherTest {
         checkYes(20, "class A { class B { String x() { return null; } } }\n");
     }
 
+    public void testSubClassMethodNoAnnotationTouchPublicAroundSpace() {
+        checkYes(20, "class A { class B { \npublic String x() { return null; } } }\n");
+    }
+
     public void testSubClassMethodNoAnnotationTouchPublic() {
         checkYes(20, "class A { class B { public String x() { return null; } } }\n");
     }
@@ -135,5 +139,49 @@ public class AtMatcherTest extends BaseMatcherTest {
 
     public void testTopClassInAnnotation() {
         checkNo(1, "@Deprecated\nclass A {}\n");
+    }
+
+    public void testNoArgMethod() {
+        checkYes(17, "class A { void f() {} }\n");
+    }
+
+    public void testNoArgMethodSpaceAfter() {
+        checkYes(17, "class A { void f( ) {} }\n");
+    }
+
+    public void testOneArgMethod() {
+        checkYes(17, "class A { void f(int x) {} }\n");
+    }
+
+    public void testOneArgMethodSpaceAfter() {
+        checkYes(17, "class A { void f( int x) {} }\n");
+    }
+
+    public void testOneArgMethodAroundSpaces() {
+        checkYes(18, "class A { void f(  int x) {} }\n");
+    }
+
+    public void testSecondArgMethod() {
+        checkYes(24, "class A { void f(int x, double y) {} }\n");
+    }
+
+    public void testAfterFirstArgAndSpaceMethod() {
+        checkYes(24, "class A { void f(int x, ) {} }\n");
+    }
+
+    public void testAfterFirstArgMethod() {
+        checkYes(23, "class A { void f(int x,) {} }\n");
+    }
+
+    public void testOneFinalArgMethod() {
+        checkYes(17, "class A { void f(final int x) {} }\n");
+    }
+
+    public void testOneStringArgMethod() {
+        checkYes(17, "class A { void f(String x) {} }\n");
+    }
+
+    public void testOneAnnotatedArgMethod() {
+        checkYes(17, "class A { void f(@Deprecated String x) {} }\n");
     }
 }

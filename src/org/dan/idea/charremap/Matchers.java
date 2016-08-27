@@ -12,6 +12,7 @@ import static com.intellij.psi.JavaTokenType.LONG_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PRIVATE_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PROTECTED_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PUBLIC_KEYWORD;
+import static com.intellij.psi.JavaTokenType.RPARENTH;
 import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.JAVA_FILE;
 import static com.intellij.psi.impl.source.tree.JavaElementType.ANNOTATION;
 import static com.intellij.psi.impl.source.tree.JavaElementType.CLASS;
@@ -35,22 +36,27 @@ import static org.dan.idea.charremap.composite.Seq.seq;
 import org.dan.idea.charremap.composite.One;
 import org.dan.idea.charremap.composite.Or;
 import org.dan.idea.charremap.composite.Plus;
+import org.dan.idea.charremap.composite.Seq;
 
 public class Matchers {
     private static final Plus P_CLASS = plus(CLASS);
+    private static final One O_FIELD = one(FIELD);
+    private static final One O_MODIFIER_LIST = one(MODIFIER_LIST);
+    private static final One O_METHOD = one(METHOD);
+    private static final Or METHOD_OR_FIELD = or(O_FIELD, O_METHOD);
+    private static final One O_PARAM_LIST = one(PARAMETER_LIST);
+    private static final Seq PAR_PAR_LIST_METHOD = seq(one(PARAMETER), O_PARAM_LIST, O_METHOD);
 
-    public static final One O_FIELD = one(FIELD);
-    public static final One O_MODIFIER_LIST = one(MODIFIER_LIST);
-    public static final One O_METHOD = one(METHOD);
-    public static final Or METHOD_OR_FIELD = or(O_FIELD, O_METHOD);
     public static Matcher AT_MATCHER = seq(
             or(
+                    seq(one(RPARENTH), O_PARAM_LIST, O_METHOD, P_CLASS),
                     seq(or(one(PRIVATE_KEYWORD),
                             one(PUBLIC_KEYWORD),
                             one(PROTECTED_KEYWORD),
                             one(FINAL_KEYWORD)),
                             O_MODIFIER_LIST,
-                            maybe(METHOD_OR_FIELD), P_CLASS),
+                            maybe(or(PAR_PAR_LIST_METHOD,
+                                    METHOD_OR_FIELD)), P_CLASS),
                     seq(or(
                             seq(one(IDENTIFIER), one(JAVA_CODE_REFERENCE)),
                             one(INT_KEYWORD),
@@ -60,14 +66,14 @@ public class Matchers {
                             one(BYTE_KEYWORD),
                             one(LONG_KEYWORD)),
                             one(TYPE),
-                            METHOD_OR_FIELD,
+                            or(PAR_PAR_LIST_METHOD, METHOD_OR_FIELD),
                             P_CLASS),
                     seq(one(AT), one(ANNOTATION), O_MODIFIER_LIST,
-                            maybe(FIELD), P_CLASS),
+                            maybe(or(O_FIELD, PAR_PAR_LIST_METHOD)), P_CLASS),
                     seq(WS,
                             or(
                                     seq(O_FIELD, P_CLASS),
-                                    seq(maybe(PARAMETER), one(PARAMETER_LIST),
+                                    seq(maybe(PARAMETER), O_PARAM_LIST,
                                             O_METHOD, P_CLASS),
                                     seq(maybe(MODIFIER_LIST), any(CLASS))))),
             one(JAVA_FILE),

@@ -55,7 +55,7 @@ public class MapperAdapter implements TypedActionHandler {
     }
 
     public static void logPaths(char c, ASTNode node) {
-        logger.info("{}) current [{}]\nnext [{}]\nprev [{}]",
+        logger.info("{})\ncurrent [{}]\nnext [{}]\nprev [{}]",
                 c,
                 types(node),
                 types(node.getTreeNext()),
