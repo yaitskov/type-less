@@ -36,7 +36,6 @@ public class RootMapper implements Mapper {
         }
         final char mappedC = mayBeMapped.get();
         final int offset = ide.offset();
-        final LogicalPosition lpos = ide.offsetToLogical(offset);
         if (mappedC != ide.eventChar()) {
             logger.info("Map character [{}] => [{}] at offset [{}]",
                     ide.eventChar(), mappedC, offset);
@@ -86,9 +85,11 @@ public class RootMapper implements Mapper {
                 return of('<');
             }
             if (mappedC == '.'
-                    && isLetter(prevChar)
-                    && content.substring(offset - lpos.column, offset).contains("<")) {
-                return of('>');
+                    && isLetter(prevChar)) {
+                final LogicalPosition lpos = ide.offsetToLogical(offset);
+                if (content.substring(offset - lpos.column, offset).contains("<")) {
+                    return of('>');
+                }
             }
         }
         return of(mappedC);
