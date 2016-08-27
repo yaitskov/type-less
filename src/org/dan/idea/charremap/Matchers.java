@@ -12,7 +12,6 @@ import static com.intellij.psi.JavaTokenType.LONG_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PRIVATE_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PROTECTED_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PUBLIC_KEYWORD;
-import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.JAVA_FILE;
 import static com.intellij.psi.impl.source.tree.JavaElementType.ANNOTATION;
 import static com.intellij.psi.impl.source.tree.JavaElementType.CLASS;
@@ -34,6 +33,7 @@ import static org.dan.idea.charremap.composite.PrevChar.prevChar;
 import static org.dan.idea.charremap.composite.Seq.seq;
 
 import org.dan.idea.charremap.composite.One;
+import org.dan.idea.charremap.composite.Or;
 import org.dan.idea.charremap.composite.Plus;
 
 public class Matchers {
@@ -41,13 +41,16 @@ public class Matchers {
 
     public static final One O_FIELD = one(FIELD);
     public static final One O_MODIFIER_LIST = one(MODIFIER_LIST);
+    public static final One O_METHOD = one(METHOD);
+    public static final Or METHOD_OR_FIELD = or(O_FIELD, O_METHOD);
     public static Matcher AT_MATCHER = seq(
             or(
                     seq(or(one(PRIVATE_KEYWORD),
                             one(PUBLIC_KEYWORD),
                             one(PROTECTED_KEYWORD),
                             one(FINAL_KEYWORD)),
-                            O_MODIFIER_LIST, O_FIELD, P_CLASS),
+                            O_MODIFIER_LIST,
+                            maybe(METHOD_OR_FIELD), P_CLASS),
                     seq(or(
                             seq(one(IDENTIFIER), one(JAVA_CODE_REFERENCE)),
                             one(INT_KEYWORD),
@@ -56,14 +59,16 @@ public class Matchers {
                             one(FLOAT_KEYWORD),
                             one(BYTE_KEYWORD),
                             one(LONG_KEYWORD)),
-                            one(TYPE), O_FIELD, P_CLASS),
+                            one(TYPE),
+                            METHOD_OR_FIELD,
+                            P_CLASS),
                     seq(one(AT), one(ANNOTATION), O_MODIFIER_LIST,
                             maybe(FIELD), P_CLASS),
                     seq(WS,
                             or(
                                     seq(O_FIELD, P_CLASS),
                                     seq(maybe(PARAMETER), one(PARAMETER_LIST),
-                                            one(METHOD), P_CLASS),
+                                            O_METHOD, P_CLASS),
                                     seq(maybe(MODIFIER_LIST), any(CLASS))))),
             one(JAVA_FILE),
             not(prevChar(Character::isJavaIdentifierPart)));

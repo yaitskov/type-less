@@ -57,8 +57,44 @@ public class AtMatcherTest extends BaseMatcherTest {
         checkYes(9, "class A { int x; }\n");
     }
 
+    public void testTopFinalClassNoAnnotationTouch() {
+        checkYes(0, "final class A { int x; }\n");
+    }
+
+    public void testTopPublicClassNoAnnotationTouch() {
+        checkYes(0, "public class A { int x; }\n");
+    }
+
     public void testFieldNoAnnotationTouchIntType() {
         checkYes(10, "class A { int x; }\n");
+    }
+
+    public void testMethodNoAnnotationTouchIntType() {
+        checkYes(10, "class A { int x() { return 0; } }\n");
+    }
+
+    public void testMethodNoAnnotationTouchStringType() {
+        checkYes(10, "class A { String x() { return null; } }\n");
+    }
+
+    public void testMethodNoAnnotationTouchPublic() {
+        checkYes(10, "class A { public String x() { return null; } }\n");
+    }
+
+    public void testMethodNoAnnotationTouchFinal() {
+        checkYes(10, "class A { final String x() { return null; } }\n");
+    }
+
+    public void testSubClassMethodNoAnnotationTouchStringType() {
+        checkYes(20, "class A { class B { String x() { return null; } } }\n");
+    }
+
+    public void testSubClassMethodNoAnnotationTouchPublic() {
+        checkYes(20, "class A { class B { public String x() { return null; } } }\n");
+    }
+
+    public void testSubClassMethodNoAnnotationTouchFinal() {
+        checkYes(20, "class A { class B { final String x() { return null; } } }\n");
     }
 
     public void testFieldNoAnnotationTouchStringType() {
@@ -69,8 +105,16 @@ public class AtMatcherTest extends BaseMatcherTest {
         checkYes(10, "class A { private int x; }\n");
     }
 
+    public void testSubClassFieldNoAnnotationTouchPrivate() {
+        checkYes(20, "class A { class B { private int x; } }\n");
+    }
+
     public void testFieldNoAnnotationTouchFinal() {
         checkYes(10, "class A { final int x = 1; }\n");
+    }
+
+    public void testSubClassFieldNoAnnotationTouchFinal() {
+        checkYes(20, "class A { class B { final int x = 1; } }\n");
     }
 
     public void testMethodNoAnnotationAroundSpaces() {
