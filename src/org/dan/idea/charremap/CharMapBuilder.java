@@ -21,4 +21,8 @@ public class CharMapBuilder {
         map.put(a, m);
         return this;
     }
+
+    public Map<Character, Mapper> getMap() {
+        return map;
+    }
 }
