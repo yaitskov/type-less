@@ -15,13 +15,17 @@ import static com.intellij.psi.JavaTokenType.PUBLIC_KEYWORD;
 import static com.intellij.psi.JavaTokenType.RPARENTH;
 import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.JAVA_FILE;
 import static com.intellij.psi.impl.source.tree.JavaElementType.ANNOTATION;
+import static com.intellij.psi.impl.source.tree.JavaElementType.ANONYMOUS_CLASS;
 import static com.intellij.psi.impl.source.tree.JavaElementType.CLASS;
+import static com.intellij.psi.impl.source.tree.JavaElementType.CODE_BLOCK;
 import static com.intellij.psi.impl.source.tree.JavaElementType.FIELD;
 import static com.intellij.psi.impl.source.tree.JavaElementType.JAVA_CODE_REFERENCE;
 import static com.intellij.psi.impl.source.tree.JavaElementType.METHOD;
 import static com.intellij.psi.impl.source.tree.JavaElementType.MODIFIER_LIST;
+import static com.intellij.psi.impl.source.tree.JavaElementType.NEW_EXPRESSION;
 import static com.intellij.psi.impl.source.tree.JavaElementType.PARAMETER;
 import static com.intellij.psi.impl.source.tree.JavaElementType.PARAMETER_LIST;
+import static com.intellij.psi.impl.source.tree.JavaElementType.RETURN_STATEMENT;
 import static com.intellij.psi.impl.source.tree.JavaElementType.TYPE;
 import static org.dan.idea.charremap.composite.Any.any;
 import static org.dan.idea.charremap.composite.Maybe.maybe;
@@ -47,6 +51,8 @@ public class Matchers {
     private static final One O_PARAM_LIST = one(PARAMETER_LIST);
     private static final Seq PAR_PAR_LIST_METHOD = seq(one(PARAMETER), O_PARAM_LIST, O_METHOD);
 
+    public static final Seq ANONYMOUS = seq(one(ANONYMOUS_CLASS), one(NEW_EXPRESSION),
+            one(RETURN_STATEMENT), one(CODE_BLOCK), O_METHOD);
     public static Matcher AT_MATCHER = seq(
             or(
                     seq(one(RPARENTH), O_PARAM_LIST, O_METHOD, P_CLASS),
@@ -56,7 +62,8 @@ public class Matchers {
                             one(FINAL_KEYWORD)),
                             O_MODIFIER_LIST,
                             maybe(or(PAR_PAR_LIST_METHOD,
-                                    METHOD_OR_FIELD)), P_CLASS),
+                                    O_FIELD,
+                                    seq(O_METHOD, maybe(ANONYMOUS)))), P_CLASS),
                     seq(or(
                             seq(one(IDENTIFIER), one(JAVA_CODE_REFERENCE)),
                             one(INT_KEYWORD),
@@ -72,6 +79,7 @@ public class Matchers {
                             maybe(or(O_FIELD, PAR_PAR_LIST_METHOD)), P_CLASS),
                     seq(WS,
                             or(
+                                    seq(ANONYMOUS, P_CLASS),
                                     seq(O_FIELD, P_CLASS),
                                     seq(maybe(PARAMETER), O_PARAM_LIST,
                                             O_METHOD, P_CLASS),

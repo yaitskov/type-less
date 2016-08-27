@@ -81,6 +81,14 @@ public class AtMatcherTest extends BaseMatcherTest {
         checkYes(10, "class A { public String x() { return null; } }\n");
     }
 
+    public void testAnonymousClassMethodNoAnnotationTouchPublic() {
+        checkYes(103, "import java.util.function.Supplier; class A { Supplier<Integer> f() { return new Supplier<Integer>() { public Integer get() { return 3; } }; } }\n");
+    }
+
+    public void testAnonymousClassMethodNoAnnotationSpaceAfter() {
+        checkYes(102, "import java.util.function.Supplier; class A { Supplier<Integer> f() { return new Supplier<Integer>() { public Integer get() { return 3; } }; } }\n");
+    }
+
     public void testMethodNoAnnotationTouchFinal() {
         checkYes(10, "class A { final String x() { return null; } }\n");
     }
