@@ -1,4 +1,4 @@
-package org.dan.idea.charremap.mock;
+package org.dan.idea.charremap.key;
 
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.impl.DataManagerImpl.MyDataContext;
