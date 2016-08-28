@@ -98,7 +98,8 @@ public class Matchers {
                                     METHOD_OR_FIELD),
                             P_CLASS),
                     seq(one(AT), one(ANNOTATION), O_MODIFIER_LIST,
-                            maybe(or(O_FIELD, PAR_PAR_LIST_METHOD)), P_CLASS),
+                            maybe(or(O_FIELD, seq(PAR_PAR_LIST_METHOD, M_ANONYMOUS))),
+                            P_CLASS),
                     seq(WS,
                             or(
                                     seq(ANONYMOUS, P_CLASS),

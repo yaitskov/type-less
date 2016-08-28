@@ -104,7 +104,19 @@ public class AtMatcherTest extends BaseMatcherTest {
     }
 
     public void testIntegerArgMethodOfAnonymousClassNoAnnotation() {
-        checkYes(121, "import java.util.function.Consumer; class A { Consumer<Integer> f() { return new Consumer<Integer>() { final Integer get(Integer x) {} }; } }\n");
+        checkYes(121, "import java.util.function.Consumer; class A { Consumer<Integer> f() { return new Consumer<Integer>() { final void accept(Integer x) {} }; } }\n");
+    }
+
+    public void testAfterStringArgMethodOfAnonymousClassNoAnnotation() {
+        checkYes(150, "import java.util.function.BiConsumer; class A { BiConsumer<String, Integer> f() { return new Consumer<String, Integer>() { final void accept(String x,) {} }; } }\n");
+    }
+
+    public void testSecondArgMethodOfAnonymousClassBeforeAnnotationTouch() {
+        checkYes(151, "import java.util.function.BiConsumer; class A { BiConsumer<String, Integer> f() { return new Consumer<String, Integer>() { final void accept(String x, @Deprecated Integer x) {} }; } }\n");
+    }
+
+    public void testSecondArgMethodOfAnonymousClassAfterAnnotationTouchType() {
+        checkYes(163, "import java.util.function.BiConsumer; class A { BiConsumer<String, Integer> f() { return new Consumer<String, Integer>() { final void accept(String x, @Deprecated Integer x) {} }; } }\n");
     }
 
     public void testAnonymousClassSubClassNoAnnotationTouchPublic() {
