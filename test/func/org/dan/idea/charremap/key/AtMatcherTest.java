@@ -99,6 +99,10 @@ public class AtMatcherTest extends BaseMatcherTest {
         checkYes(103, "import java.util.function.Supplier; class A { Supplier<Integer> f() { return new Supplier<Integer>() { public Integer get() { return 3; } }; } }\n");
     }
 
+    public void testNoArgMethodOfAnonymousClassNoAnnotation() {
+        checkYes(122, "import java.util.function.Supplier; class A { Supplier<Integer> f() { return new Supplier<Integer>() { public Integer get() { return 3; } }; } }\n");
+    }
+
     public void testAnonymousClassSubClassNoAnnotationTouchPublic() {
         checkYes(103, "import java.util.function.Supplier; class A { Supplier<Integer> f() { return new Supplier<Integer>() { class B {} public Integer get() { return 3; } }; } }\n");
     }

@@ -64,7 +64,8 @@ public class Matchers {
 
     public static Matcher AT_MATCHER = seq(
             or(
-                    seq(one(RPARENTH), O_PARAM_LIST, O_METHOD, P_CLASS),
+                    seq(one(RPARENTH), O_PARAM_LIST, O_METHOD,
+                            maybe(ANONYMOUS), P_CLASS),
                     seq(one(CLASS_KEYWORD), one(CLASS),
                             or(
                                     seq(one(DECLARATION_STATEMENT), O_C_BLOCK,
