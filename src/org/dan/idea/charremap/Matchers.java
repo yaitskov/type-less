@@ -42,6 +42,7 @@ import static org.dan.idea.charremap.composite.Plus.plus;
 import static org.dan.idea.charremap.composite.PrevChar.prevChar;
 import static org.dan.idea.charremap.composite.Seq.seq;
 
+import org.dan.idea.charremap.composite.Maybe;
 import org.dan.idea.charremap.composite.One;
 import org.dan.idea.charremap.composite.Or;
 import org.dan.idea.charremap.composite.Plus;
@@ -62,10 +63,11 @@ public class Matchers {
     private static final Seq ANONYMOUS = seq(one(ANONYMOUS_CLASS),
             one(NEW_EXPRESSION), RETURN_CODE_METHOD);
 
+    public static final Maybe M_ANONYMOUS = maybe(ANONYMOUS);
     public static Matcher AT_MATCHER = seq(
             or(
                     seq(one(RPARENTH), O_PARAM_LIST, O_METHOD,
-                            maybe(ANONYMOUS), P_CLASS),
+                            M_ANONYMOUS, P_CLASS),
                     seq(one(CLASS_KEYWORD), one(CLASS),
                             or(
                                     seq(one(DECLARATION_STATEMENT), O_C_BLOCK,
@@ -82,7 +84,7 @@ public class Matchers {
                             O_MODIFIER_LIST,
                             maybe(or(PAR_PAR_LIST_METHOD,
                                     O_FIELD,
-                                    seq(O_METHOD, maybe(ANONYMOUS)))), P_CLASS),
+                                    seq(O_METHOD, M_ANONYMOUS))), P_CLASS),
                     seq(or(
                             seq(one(IDENTIFIER), one(JAVA_CODE_REFERENCE)),
                             one(INT_KEYWORD),
@@ -92,7 +94,8 @@ public class Matchers {
                             one(BYTE_KEYWORD),
                             one(LONG_KEYWORD)),
                             one(TYPE),
-                            or(PAR_PAR_LIST_METHOD, METHOD_OR_FIELD),
+                            or(seq(PAR_PAR_LIST_METHOD, M_ANONYMOUS),
+                                    METHOD_OR_FIELD),
                             P_CLASS),
                     seq(one(AT), one(ANNOTATION), O_MODIFIER_LIST,
                             maybe(or(O_FIELD, PAR_PAR_LIST_METHOD)), P_CLASS),
