@@ -3,6 +3,7 @@ package org.dan.idea.charremap;
 import static com.intellij.psi.JavaTokenType.AT;
 import static com.intellij.psi.JavaTokenType.BOOLEAN_KEYWORD;
 import static com.intellij.psi.JavaTokenType.BYTE_KEYWORD;
+import static com.intellij.psi.JavaTokenType.CLASS_KEYWORD;
 import static com.intellij.psi.JavaTokenType.DOUBLE_KEYWORD;
 import static com.intellij.psi.JavaTokenType.FINAL_KEYWORD;
 import static com.intellij.psi.JavaTokenType.FLOAT_KEYWORD;
@@ -20,8 +21,10 @@ import static com.intellij.psi.impl.source.tree.JavaElementType.ANNOTATION;
 import static com.intellij.psi.impl.source.tree.JavaElementType.ANONYMOUS_CLASS;
 import static com.intellij.psi.impl.source.tree.JavaElementType.CLASS;
 import static com.intellij.psi.impl.source.tree.JavaElementType.CODE_BLOCK;
+import static com.intellij.psi.impl.source.tree.JavaElementType.DECLARATION_STATEMENT;
 import static com.intellij.psi.impl.source.tree.JavaElementType.FIELD;
 import static com.intellij.psi.impl.source.tree.JavaElementType.JAVA_CODE_REFERENCE;
+import static com.intellij.psi.impl.source.tree.JavaElementType.LAMBDA_EXPRESSION;
 import static com.intellij.psi.impl.source.tree.JavaElementType.METHOD;
 import static com.intellij.psi.impl.source.tree.JavaElementType.MODIFIER_LIST;
 import static com.intellij.psi.impl.source.tree.JavaElementType.NEW_EXPRESSION;
@@ -51,13 +54,24 @@ public class Matchers {
     private static final One O_METHOD = one(METHOD);
     private static final Or METHOD_OR_FIELD = or(O_FIELD, O_METHOD);
     private static final One O_PARAM_LIST = one(PARAMETER_LIST);
-    private static final Seq PAR_PAR_LIST_METHOD = seq(one(PARAMETER), O_PARAM_LIST, O_METHOD);
+    private static final Seq PAR_PAR_LIST_METHOD = seq(one(PARAMETER),
+            O_PARAM_LIST, O_METHOD);
+    private static final One O_C_BLOCK = one(CODE_BLOCK);
+    private static final Seq RETURN_CODE_METHOD = seq(one(RETURN_STATEMENT),
+            O_C_BLOCK, O_METHOD);
+    private static final Seq ANONYMOUS = seq(one(ANONYMOUS_CLASS),
+            one(NEW_EXPRESSION), RETURN_CODE_METHOD);
 
-    public static final Seq ANONYMOUS = seq(one(ANONYMOUS_CLASS), one(NEW_EXPRESSION),
-            one(RETURN_STATEMENT), one(CODE_BLOCK), O_METHOD);
     public static Matcher AT_MATCHER = seq(
             or(
                     seq(one(RPARENTH), O_PARAM_LIST, O_METHOD, P_CLASS),
+                    seq(one(CLASS_KEYWORD), one(CLASS),
+                            or(
+                                    seq(one(DECLARATION_STATEMENT), O_C_BLOCK,
+                                            one(LAMBDA_EXPRESSION),
+                                            RETURN_CODE_METHOD),
+                                    ANONYMOUS),
+                            P_CLASS),
                     seq(or(one(PRIVATE_KEYWORD),
                             one(PUBLIC_KEYWORD),
                             one(PROTECTED_KEYWORD),

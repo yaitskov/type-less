@@ -1,5 +1,7 @@
 package org.dan.idea.charremap.key;
 
+import java.util.function.Supplier;
+
 public class AtMatcherTest extends BaseMatcherTest {
     public AtMatcherTest() {
         super('2', '@');
@@ -95,6 +97,14 @@ public class AtMatcherTest extends BaseMatcherTest {
 
     public void testAnonymousClassMethodNoAnnotationTouchPublic() {
         checkYes(103, "import java.util.function.Supplier; class A { Supplier<Integer> f() { return new Supplier<Integer>() { public Integer get() { return 3; } }; } }\n");
+    }
+
+    public void testAnonymousClassSubClassNoAnnotationTouchPublic() {
+        checkYes(103, "import java.util.function.Supplier; class A { Supplier<Integer> f() { return new Supplier<Integer>() { class B {} public Integer get() { return 3; } }; } }\n");
+    }
+
+    public void testLambdaSubClassNoAnnotationTouchPublic() {
+        checkYes(85, "import java.util.function.Supplier; class A { Supplier<Integer> f() { return () -> { class B {} return 3; }; } }\n");
     }
 
     public void testAnonymousClassMethodNoAnnotationSpaceAfter() {
