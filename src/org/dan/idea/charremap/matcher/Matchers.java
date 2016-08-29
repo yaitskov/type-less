@@ -100,7 +100,7 @@ public class Matchers {
                             one(FLOAT_KEYWORD),
                             one(BYTE_KEYWORD),
                             one(LONG_KEYWORD)),
-                            one(TYPE),
+                            plus(TYPE),
                             or(seq(PAR_PAR_LIST_METHOD, M_ANONYMOUS),
                                     METHOD_OR_FIELD),
                             P_CLASS),
@@ -113,7 +113,7 @@ public class Matchers {
                                     seq(O_FIELD, P_CLASS),
                                     seq(maybe(PARAMETER), O_PARAM_LIST,
                                             O_METHOD, P_CLASS),
-                                    seq(or(O_MODIFIER_LIST,
+                                    seq(or(seq(O_MODIFIER_LIST, maybe(METHOD)),
                                             not(originNode(prevSibling(lastChild(
                                                     backward(one(ERROR_ELEMENT), lookAhead(one(EQ)))))))),
                                             any(CLASS))))),

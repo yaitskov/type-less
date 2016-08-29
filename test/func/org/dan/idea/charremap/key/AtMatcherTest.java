@@ -1,7 +1,5 @@
 package org.dan.idea.charremap.key;
 
-import java.util.function.Supplier;
-
 public class AtMatcherTest extends BaseMatcherTest {
     public AtMatcherTest() {
         super('2', '@');
@@ -81,6 +79,10 @@ public class AtMatcherTest extends BaseMatcherTest {
 
     public void testMethodNoAnnotationTouchIntType() {
         checkYes(10, "class A { int x() { return 0; } }\n");
+    }
+
+    public void testMethodAfterAnnotationBeforeNewLine() {
+        checkYes(30, "public class A {\n @Deprecated \npublic int x() {\n return 0; } }\n");
     }
 
     public void testMethodNoAnnotationTouchStringType() {
@@ -213,6 +215,10 @@ public class AtMatcherTest extends BaseMatcherTest {
 
     public void testOneArgMethod() {
         checkYes(17, "class A { void f(int x) {} }\n");
+    }
+
+    public void testOneArrayArgMethod() {
+        checkYes(17, "class A { void f(int[] x) {} }\n");
     }
 
     public void testOneArgMethodSpaceAfter() {
