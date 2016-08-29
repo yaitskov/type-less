@@ -69,6 +69,10 @@ public class AtMatcherTest extends BaseMatcherTest {
         checkYes(10, "class A { int x; }\n");
     }
 
+    public void testBeforeFieldAfterAnnotationWithNewLine() {
+        checkYes(23, "class A {\n @Deprecated \nprivate int x; }\n");
+    }
+
     public void testStaticFieldNoAnnotationTouch() {
         checkYes(10, "class A { static int x; }\n");
     }

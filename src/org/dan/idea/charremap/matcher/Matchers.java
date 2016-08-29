@@ -113,7 +113,7 @@ public class Matchers {
                                     seq(O_FIELD, P_CLASS),
                                     seq(maybe(PARAMETER), O_PARAM_LIST,
                                             O_METHOD, P_CLASS),
-                                    seq(or(seq(O_MODIFIER_LIST, maybe(METHOD)),
+                                    seq(or(seq(O_MODIFIER_LIST, maybe(METHOD_OR_FIELD)),
                                             not(originNode(prevSibling(lastChild(
                                                     backward(one(ERROR_ELEMENT), lookAhead(one(EQ)))))))),
                                             any(CLASS))))),
