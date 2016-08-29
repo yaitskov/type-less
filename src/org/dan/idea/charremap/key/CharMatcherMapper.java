@@ -4,8 +4,8 @@ import static java.util.Optional.empty;
 
 import java.util.Optional;
 
-import org.dan.idea.charremap.Matcher;
-import org.dan.idea.charremap.MatcherState;
+import org.dan.idea.charremap.matcher.Matcher;
+import org.dan.idea.charremap.matcher.MatcherState;
 
 public class CharMatcherMapper extends MatcherMapper {
     private final char out;

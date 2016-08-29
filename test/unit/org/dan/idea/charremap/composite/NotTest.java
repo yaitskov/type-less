@@ -1,7 +1,7 @@
 package org.dan.idea.charremap.composite;
 
 import static com.intellij.psi.TokenType.WHITE_SPACE;
-import static org.dan.idea.charremap.MatcherState.of;
+import static org.dan.idea.charremap.matcher.ParentMatcherState.of;
 import static org.dan.idea.charremap.composite.Util.seqUp;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

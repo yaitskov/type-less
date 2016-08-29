@@ -2,7 +2,9 @@ package org.dan.idea.charremap;
 
 import static com.intellij.openapi.actionSystem.CommonDataKeys.PSI_FILE;
 import static java.util.Optional.of;
-import static org.dan.idea.charremap.key.MatcherMapper.types;
+import static java.util.Optional.ofNullable;
+import static org.dan.idea.charremap.key.MatcherMapper.typesOfParents;
+import static org.dan.idea.charremap.key.MatcherMapper.typesOfPrevSiblings;
 import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Optional;
@@ -57,8 +59,12 @@ public class MapperAdapter implements TypedActionHandler {
     public static void logPaths(char c, ASTNode node) {
         logger.info("{})\ncurrent [{}]\nnext [{}]\nprev [{}]",
                 c,
-                types(node),
-                types(node.getTreeNext()),
-                types(node.getTreePrev()));
+                typesOfParents(node),
+                typesOfParents(node.getTreeNext()),
+                typesOfParents(node.getTreePrev()));
+        logger.info("last child of prev\n[{}]",
+                typesOfPrevSiblings(
+                        ofNullable(node.getTreePrev()).map(ASTNode::getLastChildNode)
+                                .orElse(null)));
     }
 }

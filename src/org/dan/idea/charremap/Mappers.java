@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dan.idea.charremap.key.CharMatcherMapper;
+import org.dan.idea.charremap.matcher.Matchers;
 
 public class Mappers {
     public static final Map<Character, Mapper> CHAR_MAP = new CharMapBuilder(new HashMap<>())

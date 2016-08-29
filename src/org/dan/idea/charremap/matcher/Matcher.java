@@ -1,4 +1,4 @@
-package org.dan.idea.charremap;
+package org.dan.idea.charremap.matcher;
 
 import java.util.function.Predicate;
 

@@ -1,10 +1,11 @@
-package org.dan.idea.charremap;
+package org.dan.idea.charremap.matcher;
 
 import static com.intellij.psi.JavaTokenType.AT;
 import static com.intellij.psi.JavaTokenType.BOOLEAN_KEYWORD;
 import static com.intellij.psi.JavaTokenType.BYTE_KEYWORD;
 import static com.intellij.psi.JavaTokenType.CLASS_KEYWORD;
 import static com.intellij.psi.JavaTokenType.DOUBLE_KEYWORD;
+import static com.intellij.psi.JavaTokenType.EQ;
 import static com.intellij.psi.JavaTokenType.FINAL_KEYWORD;
 import static com.intellij.psi.JavaTokenType.FLOAT_KEYWORD;
 import static com.intellij.psi.JavaTokenType.IDENTIFIER;
@@ -16,6 +17,7 @@ import static com.intellij.psi.JavaTokenType.PUBLIC_KEYWORD;
 import static com.intellij.psi.JavaTokenType.RPARENTH;
 import static com.intellij.psi.JavaTokenType.STATIC_KEYWORD;
 import static com.intellij.psi.JavaTokenType.VOLATILE_KEYWORD;
+import static com.intellij.psi.TokenType.ERROR_ELEMENT;
 import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.JAVA_FILE;
 import static com.intellij.psi.impl.source.tree.JavaElementType.ANNOTATION;
 import static com.intellij.psi.impl.source.tree.JavaElementType.ANONYMOUS_CLASS;
@@ -33,13 +35,18 @@ import static com.intellij.psi.impl.source.tree.JavaElementType.PARAMETER_LIST;
 import static com.intellij.psi.impl.source.tree.JavaElementType.RETURN_STATEMENT;
 import static com.intellij.psi.impl.source.tree.JavaElementType.TYPE;
 import static org.dan.idea.charremap.composite.Any.any;
+import static org.dan.idea.charremap.composite.Backward.backward;
+import static org.dan.idea.charremap.composite.LastChild.lastChild;
+import static org.dan.idea.charremap.composite.LookAhead.lookAhead;
 import static org.dan.idea.charremap.composite.Maybe.maybe;
 import static org.dan.idea.charremap.composite.Not.not;
 import static org.dan.idea.charremap.composite.One.WS;
 import static org.dan.idea.charremap.composite.One.one;
 import static org.dan.idea.charremap.composite.Or.or;
+import static org.dan.idea.charremap.composite.OriginNode.originNode;
 import static org.dan.idea.charremap.composite.Plus.plus;
 import static org.dan.idea.charremap.composite.PrevChar.prevChar;
+import static org.dan.idea.charremap.composite.PrevSibling.prevSibling;
 import static org.dan.idea.charremap.composite.Seq.seq;
 
 import org.dan.idea.charremap.composite.Maybe;
@@ -62,8 +69,8 @@ public class Matchers {
             O_C_BLOCK, O_METHOD);
     private static final Seq ANONYMOUS = seq(one(ANONYMOUS_CLASS),
             one(NEW_EXPRESSION), RETURN_CODE_METHOD);
+    private static final Maybe M_ANONYMOUS = Maybe.maybe(ANONYMOUS);
 
-    public static final Maybe M_ANONYMOUS = maybe(ANONYMOUS);
     public static Matcher AT_MATCHER = seq(
             or(
                     seq(one(RPARENTH), O_PARAM_LIST, O_METHOD,
@@ -82,7 +89,7 @@ public class Matchers {
                             one(STATIC_KEYWORD),
                             one(FINAL_KEYWORD)),
                             O_MODIFIER_LIST,
-                            maybe(or(PAR_PAR_LIST_METHOD,
+                            Maybe.maybe(or(PAR_PAR_LIST_METHOD,
                                     O_FIELD,
                                     seq(O_METHOD, M_ANONYMOUS))), P_CLASS),
                     seq(or(
@@ -98,7 +105,7 @@ public class Matchers {
                                     METHOD_OR_FIELD),
                             P_CLASS),
                     seq(one(AT), one(ANNOTATION), O_MODIFIER_LIST,
-                            maybe(or(O_FIELD, seq(PAR_PAR_LIST_METHOD, M_ANONYMOUS))),
+                            Maybe.maybe(or(O_FIELD, seq(PAR_PAR_LIST_METHOD, M_ANONYMOUS))),
                             P_CLASS),
                     seq(WS,
                             or(
@@ -106,7 +113,10 @@ public class Matchers {
                                     seq(O_FIELD, P_CLASS),
                                     seq(maybe(PARAMETER), O_PARAM_LIST,
                                             O_METHOD, P_CLASS),
-                                    seq(maybe(MODIFIER_LIST), any(CLASS))))),
+                                    seq(or(O_MODIFIER_LIST,
+                                            not(originNode(prevSibling(lastChild(
+                                                    backward(one(ERROR_ELEMENT), lookAhead(one(EQ)))))))),
+                                            any(CLASS))))),
             one(JAVA_FILE),
             not(prevChar(Character::isJavaIdentifierPart)));
 }

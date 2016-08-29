@@ -2,8 +2,8 @@ package org.dan.idea.charremap.composite;
 
 import java.util.function.Predicate;
 
-import org.dan.idea.charremap.Matcher;
-import org.dan.idea.charremap.MatcherState;
+import org.dan.idea.charremap.matcher.Matcher;
+import org.dan.idea.charremap.matcher.MatcherState;
 
 public class PrevChar implements Matcher {
     private final Predicate<Character> predicate;
@@ -18,6 +18,6 @@ public class PrevChar implements Matcher {
 
     @Override
     public boolean test(MatcherState s) {
-        return s.offset > 0 && predicate.test(s.docText.charAt(s.offset - 1));
+        return s.offset() > 0 && predicate.test(s.docText().charAt(s.offset() - 1));
     }
 }

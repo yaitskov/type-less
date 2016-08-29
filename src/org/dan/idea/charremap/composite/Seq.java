@@ -1,7 +1,7 @@
 package org.dan.idea.charremap.composite;
 
-import org.dan.idea.charremap.Matcher;
-import org.dan.idea.charremap.MatcherState;
+import org.dan.idea.charremap.matcher.Matcher;
+import org.dan.idea.charremap.matcher.MatcherState;
 
 public class Seq implements Matcher {
     private final Matcher[] matchers;

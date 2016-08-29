@@ -1,8 +1,8 @@
 package org.dan.idea.charremap.composite;
 
 import com.intellij.lang.ASTNode;
-import org.dan.idea.charremap.Matcher;
-import org.dan.idea.charremap.MatcherState;
+import org.dan.idea.charremap.matcher.Matcher;
+import org.dan.idea.charremap.matcher.MatcherState;
 
 public class Or implements Matcher {
     private final Matcher[] options;

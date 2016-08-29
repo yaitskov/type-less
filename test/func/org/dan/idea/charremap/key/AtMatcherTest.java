@@ -246,4 +246,92 @@ public class AtMatcherTest extends BaseMatcherTest {
     public void testOneAnnotatedArgMethod() {
         checkYes(17, "class A { void f(@Deprecated String x) {} }\n");
     }
+
+    public void testStaticFinalIntField2() {
+        checkNo(30, "class A { static final int f =\n}");
+    }
+
+    public void testPublicStaticFinalDoubleField2() {
+        checkNo(40, "class A { public static final double f =\n}");
+    }
+
+    public void testFloatField2() {
+        checkNo(19, "class A { float f =\n}");
+    }
+
+    public void testMethodBeforeField() {
+        checkYes(22, "class A { float f = 1; void m() {} }");
+    }
+
+    public void testFieldBeforeMethod() {
+        checkNo(19, "class A { float f =\n void m() {} }");
+    }
+
+    public void testFloatFieldSum1And2() {
+        checkNo(26, "class A { float f = 1.0f + \n}");
+    }
+
+    public void testFloatFieldMethodArg() {
+        checkNo(58, "class A { static int g(int i) { return i; } float f = A.g()\n}");
+    }
+
+    public void testAddDigitToFloatField2() {
+        checkNo(21, "class A { float f = 1;\n}");
+    }
+
+    public void testPass2AsArg() {
+        checkNo(40, "class A { void f(int a) {} void g() { f() } }");
+    }
+
+    public void testSet2ToLocalVar() {
+        checkNo(29, "class A { void f() { int x = }}");
+    }
+
+    public void testSet2ToLocalVarInStatic() {
+        checkNo(27, "class A { static { int x = \n}}");
+    }
+
+    public void testSetSumOf2ToLocalVar() {
+        checkNo(33, "class A { void f() { int x = 1 + }}");
+    }
+
+    public void testAddDigitToFloatField2NoSemicolon() {
+        checkNo(21, "class A { float f = 1}");
+    }
+
+    public void testReturnFloat2() {
+        checkNo(29, "class A { float f() { return \n}\n}");
+    }
+
+    public void testStringLiteralField() {
+        checkNo(22, "class A { String f = \"\"\n}");
+    }
+
+    public void testAllocateArraySize() {
+        checkNo(28, "class A { int[] a = new int[]\n}");
+    }
+
+    public void testNonFirstLetterOfVariable() {
+        checkNo(15, "class A { int a\n}");
+    }
+
+    public void testMidLetterOfVariable() {
+        checkNo(15, "class A { int ab;\n}");
+    }
+
+    public void testMidLetterOfMethodDeclaration() {
+        checkNo(16, "class A { void ab() {}\n}");
+    }
+
+    public void testMidLetterSubClassDeclaration() {
+        checkNo(17, "class A { class Bb \n}");
+    }
+
+    public void testLastLetterSubClassDeclaration() {
+        checkNo(18, "class A { class Bb \n}");
+    }
+
+    public void testLastLetterClassDeclaration() {
+        checkNo(7, "class A {}");
+    }
 }
