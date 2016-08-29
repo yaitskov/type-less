@@ -1,21 +1,42 @@
 <idea-plugin version="2">
   <id>org.dan.idea.charremap.plugin</id>
   <name>TypeLess</name>
-  <version>0.3</version>
+  <version>0.4</version>
   <vendor email="dyaitskov@gmail.com"
           url="https://github.com/yaitskov">Horns and Hoofs</vendor>
 
   <description><![CDATA[
       <p>
-      The plugin reduces the number of keys you need to press while you code in Java,
-      because it replaces default less frequent characters with more frequent ones.
-      This gain profit in more than 4% less keys to be pressed.
-      Remapping is associative. Now it's just SHIFT inversion for some keys.
+      The goal of this plugin is to relief the burden of Java programmer
+      of pressing extra keys while typing and making coding more ergonomic.
       </p>
 
       <p>
-      E.g. when you type <em>9</em> as usual <em>(</em> will be inserted
-      and vice versa (<em>(</em> => <em>9</em>)
+      In two words it could be described as T9 plus auto-replace
+      for the structured language with a context free grammar.
+      </p>
+
+      <p>So where is the burden?
+      Character frequencies in Java differ from English. So even if you just inverse Shift key
+      for a half dozen keys (like 9 0 - ,.) you will gain 4% less key to be pressed to write
+      an average program in Java, but why do you need to think about Shift in a formal language?!
+      </p>
+
+      <p>
+      IDE can figure out what did you want to input when you have pressed key "2" ("@" or "2").
+      There are tons of information such as AST, Java types, and class hierarchies to accomplish this.
+      </p>
+
+      <p>
+      At the current stage just key "2" has smart mapping.
+      Rest subset of special characters have inverted Shift
+      behavior plus auto-replace rules.
+      See the table below.
+      </p>
+
+      <p>
+      E.g. when you type <b>9</b> as usual <b>(</b> will be inserted
+      and vice versa (<b>(</b> => <b>9</b>)
       </p>
 
       <table border="1" cellpadding="10">
@@ -24,13 +45,13 @@
       <tr><td>0</td><td>)</td></tr>
       <tr><td>[</td><td>{</td></tr>
       <tr><td>]</td><td>}</td></tr>
-      <tr><td>2</td><td>@</td></tr>
       <tr><td>'</td><td>"</td></tr>
       <tr><td>`</td><td>~</td></tr>
       <tr><td>\</td><td>|</td></tr>
       </table>
 
-      <p>Letter after @ is upcased.</p>
+      <h4>Auto replace rules</h4>
+      <p>Letter after @ is upper cased.</p>
       <p>Lambda delimiter of arguments and the body is recognized.</p>
       <p>Replace "{" with "[" right after letter or digit, and "}" after "["
          (Variable with array type like "String[]").</p>
@@ -43,7 +64,10 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      <h1>0.3</h1>
+      <h4>0.4</h4>
+      <p>Smart mapping 2=&gt;@ anywhere outside of literal strings and characters.</p>
+
+      <h4>0.3</h4>
       <p>Replace "-." with "-> " and upcase letter after "@"</p>
       <p>Replace "{" with "[" right after letter or digit, and "}" after "["
          (Variable with array type like "String[]").</p>
@@ -53,12 +77,12 @@
       <p>Replace "1=" with "!= ".</p>
       <p>Replace "LETTER&lt;SPACE" with "LETTER,SPACE".</p>
 
-      <h1>0.2</h1>
+      <h4>0.2</h4>
       <p>Retrieve suggestions for auto-completion.</p>
       <p>Fix mapping of '{'.</p>
       <p>Map '~' and '|' keys.</p>
 
-      <h1>0.1</h1>
+      <h4>0.1</h4>
       <p>Initial release.</p>
     ]]>
   </change-notes>
