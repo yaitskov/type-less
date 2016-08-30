@@ -75,11 +75,20 @@ public class Matchers {
             maybe(seq(O_NEW_EXPRESSION, one(EXPRESSION_LIST))),
             O_NEW_EXPRESSION, RETURN_CODE_METHOD);
     private static final Maybe M_ANONYMOUS = Maybe.maybe(ANONYMOUS);
+    private static final Or SCALAR_KEYWORD = or(one(INT_KEYWORD),
+            one(DOUBLE_KEYWORD),
+            one(BOOLEAN_KEYWORD),
+            one(FLOAT_KEYWORD),
+            one(BYTE_KEYWORD),
+            one(VOID_KEYWORD),
+            one(LONG_KEYWORD));
+    private static final One O_FILE = one(JAVA_FILE);
+    private static final One O_RPARENTH = one(RPARENTH);
 
     public static Matcher AT_MATCHER = seq(
             or(
                     seq(one(RBRACE), ANONYMOUS, P_CLASS),
-                    seq(one(RPARENTH), O_PARAM_LIST, O_METHOD,
+                    seq(O_RPARENTH, O_PARAM_LIST, O_METHOD,
                             M_ANONYMOUS, P_CLASS),
                     seq(one(CLASS_KEYWORD), one(CLASS),
                             or(
@@ -100,13 +109,7 @@ public class Matchers {
                                     seq(O_METHOD, M_ANONYMOUS))), P_CLASS),
                     seq(or(
                             seq(one(IDENTIFIER), one(JAVA_CODE_REFERENCE)),
-                            one(INT_KEYWORD),
-                            one(DOUBLE_KEYWORD),
-                            one(BOOLEAN_KEYWORD),
-                            one(FLOAT_KEYWORD),
-                            one(BYTE_KEYWORD),
-                            one(VOID_KEYWORD),
-                            one(LONG_KEYWORD)),
+                            SCALAR_KEYWORD),
                             plus(TYPE),
                             maybe(or(seq(PAR_PAR_LIST_METHOD, M_ANONYMOUS),
                                     seq(O_METHOD, M_ANONYMOUS),
@@ -125,7 +128,7 @@ public class Matchers {
                                             not(originNode(prevSibling(lastChild(
                                                     backward(one(ERROR_ELEMENT), lookAhead(one(EQ)))))))),
                                             any(CLASS))))),
-            one(JAVA_FILE),
+            O_FILE,
             not(prevChar(Character::isJavaIdentifierPart)));
 
     public static Matcher LESS_MATCHER = seq(
