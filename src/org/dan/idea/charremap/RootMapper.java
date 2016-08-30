@@ -51,17 +51,6 @@ public class RootMapper implements Mapper {
                             "Letters right after '@' are upcased automatically");
                 }
             }
-            if (offset > 1) {
-                char p2Char = content.charAt(offset - 2);
-                if (mappedC == '2' && ((prevChar != ' ' && prevChar != '(') || p2Char != ' ')) {
-                    return of('2');
-                }
-                if (mappedC == ' ' && prevChar == '<' && isLetter(p2Char)) {
-                    ide.update(w -> w.replace(offset - 1, offset, ", ")
-                            .moveTo(offset + 1));
-                    return empty();
-                }
-            }
             if (mappedC == '=' && prevChar == '1') {
                 ide.update(w -> w.replace(offset - 1, offset, "!= ")
                         .moveTo(offset + 2));
@@ -80,9 +69,6 @@ public class RootMapper implements Mapper {
             }
             if (mappedC == '_' && (prevChar == ' ' || prevChar == ')')) {
                 return of('-');
-            }
-            if (mappedC == ',' && isLetter(prevChar)) {
-                return of('<');
             }
             if (mappedC == '.'
                     && isLetter(prevChar)) {
