@@ -21,6 +21,10 @@ public class LessMatcherTest extends BaseMatcherTest {
         checkYes(37, "import java.util.List; class A { List l; }");
     }
 
+    public void testArrayFieldInitOfTopClass() {
+        checkNo(33, "class A { int[] a = new int[] { 1 }\n }");
+    }
+
     public void testFieldOfTopGenericClass() {
         checkYes(40, "import java.util.List; class A<T> { List l; }");
     }
