@@ -66,7 +66,7 @@ public class LessMatcherTest extends BaseMatcherTest {
     }
 
     public void testCommaArgument() {
-        checkYes(23, "class A { void f (int a) {}}");
+        checkNo(23, "class A { void f (int a) {}}");
     }
 
     public void testSecondCommaArgument() {
