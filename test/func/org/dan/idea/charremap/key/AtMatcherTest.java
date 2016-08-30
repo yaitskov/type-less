@@ -109,6 +109,18 @@ public class AtMatcherTest extends BaseMatcherTest {
         checkYes(10, "class A { static String x() { return null; } }\n");
     }
 
+    public void testAnonymousClassMethodNoAnnotationInConstructor() {
+        checkYes(72, "class A{class S{S(Object e) {}} Object f() { return new S(new Object() { void g() {} }; } }\n");
+    }
+
+    public void testAnonymousClassMethodNoAnnotationInConstructorTouch() {
+        checkYes(73, "class A{class S{S(Object e) {}} Object f() { return new S(new Object() { void g() {} }; } }\n");
+    }
+
+    public void testAnonymousEmptyClassTouchRbrace() {
+        checkYes(73, "class A{class S{S(Object e) {}} Object f() { return new S(new Object() { }; } }\n");
+    }
+
     public void testAnonymousClassMethodNoAnnotationTouchPublic() {
         checkYes(103, "import java.util.function.Supplier; class A { Supplier<Integer> f() { return new Supplier<Integer>() { public Integer get() { return 3; } }; } }\n");
     }

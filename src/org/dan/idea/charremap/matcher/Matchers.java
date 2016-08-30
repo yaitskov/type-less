@@ -14,8 +14,10 @@ import static com.intellij.psi.JavaTokenType.LONG_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PRIVATE_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PROTECTED_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PUBLIC_KEYWORD;
+import static com.intellij.psi.JavaTokenType.RBRACE;
 import static com.intellij.psi.JavaTokenType.RPARENTH;
 import static com.intellij.psi.JavaTokenType.STATIC_KEYWORD;
+import static com.intellij.psi.JavaTokenType.VOID_KEYWORD;
 import static com.intellij.psi.JavaTokenType.VOLATILE_KEYWORD;
 import static com.intellij.psi.TokenType.ERROR_ELEMENT;
 import static com.intellij.psi.impl.java.stubs.JavaStubElementTypes.JAVA_FILE;
@@ -24,6 +26,7 @@ import static com.intellij.psi.impl.source.tree.JavaElementType.ANONYMOUS_CLASS;
 import static com.intellij.psi.impl.source.tree.JavaElementType.CLASS;
 import static com.intellij.psi.impl.source.tree.JavaElementType.CODE_BLOCK;
 import static com.intellij.psi.impl.source.tree.JavaElementType.DECLARATION_STATEMENT;
+import static com.intellij.psi.impl.source.tree.JavaElementType.EXPRESSION_LIST;
 import static com.intellij.psi.impl.source.tree.JavaElementType.FIELD;
 import static com.intellij.psi.impl.source.tree.JavaElementType.JAVA_CODE_REFERENCE;
 import static com.intellij.psi.impl.source.tree.JavaElementType.LAMBDA_EXPRESSION;
@@ -67,12 +70,15 @@ public class Matchers {
     private static final One O_C_BLOCK = one(CODE_BLOCK);
     private static final Seq RETURN_CODE_METHOD = seq(one(RETURN_STATEMENT),
             O_C_BLOCK, O_METHOD);
+    private static final One O_NEW_EXPRESSION = one(NEW_EXPRESSION);
     private static final Seq ANONYMOUS = seq(one(ANONYMOUS_CLASS),
-            one(NEW_EXPRESSION), RETURN_CODE_METHOD);
+            maybe(seq(O_NEW_EXPRESSION, one(EXPRESSION_LIST))),
+            O_NEW_EXPRESSION, RETURN_CODE_METHOD);
     private static final Maybe M_ANONYMOUS = Maybe.maybe(ANONYMOUS);
 
     public static Matcher AT_MATCHER = seq(
             or(
+                    seq(one(RBRACE), ANONYMOUS, P_CLASS),
                     seq(one(RPARENTH), O_PARAM_LIST, O_METHOD,
                             M_ANONYMOUS, P_CLASS),
                     seq(one(CLASS_KEYWORD), one(CLASS),
@@ -99,10 +105,12 @@ public class Matchers {
                             one(BOOLEAN_KEYWORD),
                             one(FLOAT_KEYWORD),
                             one(BYTE_KEYWORD),
+                            one(VOID_KEYWORD),
                             one(LONG_KEYWORD)),
                             plus(TYPE),
                             maybe(or(seq(PAR_PAR_LIST_METHOD, M_ANONYMOUS),
-                                    METHOD_OR_FIELD)),
+                                    seq(O_METHOD, M_ANONYMOUS),
+                                    O_FIELD)),
                             P_CLASS),
                     seq(one(AT), one(ANNOTATION), O_MODIFIER_LIST,
                             Maybe.maybe(or(O_FIELD, seq(PAR_PAR_LIST_METHOD, M_ANONYMOUS))),
