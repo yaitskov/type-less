@@ -9,6 +9,7 @@ import org.dan.idea.charremap.matcher.Matchers;
 public class Mappers {
     public static final Map<Character, Mapper> CHAR_MAP = new CharMapBuilder(new HashMap<>())
             .bind('2', new CharMatcherMapper('@', Matchers.AT_MATCHER))
+            .bind(',', new CharMatcherMapper('<', Matchers.LESS_MATCHER))
             .bind('[', '{')
             .bind(']', '}')
             .bind('0', ')')

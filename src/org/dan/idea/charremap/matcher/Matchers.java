@@ -127,4 +127,12 @@ public class Matchers {
                                             any(CLASS))))),
             one(JAVA_FILE),
             not(prevChar(Character::isJavaIdentifierPart)));
+
+    public static Matcher LESS_MATCHER = seq(
+//            or(
+            seq(WS, or(
+                    seq(O_C_BLOCK, O_METHOD),
+                    O_FIELD)),//),
+            P_CLASS,
+            O_FILE);
 }
