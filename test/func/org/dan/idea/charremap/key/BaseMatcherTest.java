@@ -39,7 +39,7 @@ public class BaseMatcherTest extends LightPlatformCodeInsightFixtureTestCase {
     }
 
     protected void checkNo(int offset, String text) {
-        check('2', '2', offset, text);
+        check(in, in, offset, text);
     }
 
     protected void check(char in, char out, int offset, String text) {
