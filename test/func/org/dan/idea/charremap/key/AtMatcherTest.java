@@ -97,6 +97,14 @@ public class AtMatcherTest extends BaseMatcherTest {
         checkYes(10, "class A { public String x() { return null; } }\n");
     }
 
+    public void testBeforeId() {
+        checkYes(10, "class A { asdf }\n");
+    }
+
+    public void testInId() {
+        checkNo(11, "class A { asdf }\n");
+    }
+
     public void testMethodNoAnnotationTouchStatic() {
         checkYes(10, "class A { static String x() { return null; } }\n");
     }
