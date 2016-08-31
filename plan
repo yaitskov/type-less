@@ -1,3 +1,11 @@
 http://www.jetbrains.org/intellij/sdk/docs/tutorials/editor_basics.html
 
 http://grepcode.com/file/repository.grepcode.com/java/ext/com.jetbrains/intellij-idea/10.5/com/intellij/openapi/editor/Editor.java#Editor.getGutter%28%29
+
+ide.eventNode().getTreeParent().getTreeParent().getType().resolve().getMethods()
+
+to check if class is generic:
+PsiClassType.getTypeByName("java.lang.int", editor.getProject(), GlobalSearchScope.allScope(editor.getProject())).resolveGenerics().getSubstitutor().getSubstitutionMap()
+
+
+PsiClassType.getTypeByName("java.util.List", getProject(), GlobalSearchScope.allScope(getProject())).resolveGenerics().getSubstitutor().getSubstitutionMap()
