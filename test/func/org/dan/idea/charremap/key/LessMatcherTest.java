@@ -38,15 +38,19 @@ public class LessMatcherTest extends BaseMatcherTest {
     }
 
     public void testStaticFinalMethodOfPublicFinalTopClass() {
-        checkYes(43, "public final class A {\n public static final\n}");
+        checkYes(44, "public final class A {\n public static final \n}");
     }
 
     public void testTopClassImplementsNestedList() {
         checkYes(51, "import java.util.List; class A implements List<List> {}");
     }
 
-    public void testTopClassImplementsMapCommaAfterFirstArg() {
-        checkNo(49, "import java.util.Map; class A implements Map<List> {}");
+    public void testTopClassImplementsMapCommaAfterFirstGenArg() {
+        checkYes(48, "import java.util.Map; class A implements Map<Map> {}");
+    }
+
+    public void testTopClassImplementsMapCommaAfterFirstNonGenArg() {
+        checkNo(52, "import java.util.Map; class A implements Map<Integer> {}");
     }
 
     public void testInitFieldOfTopClass() {
@@ -70,7 +74,7 @@ public class LessMatcherTest extends BaseMatcherTest {
     }
 
     public void testSecondCommaArgument() {
-        checkYes(33, "class A { void f (int a, String b) {}}");
+        checkNo(33, "class A { void f (int a, String b) {}}");
     }
 
     public void testSecondGenericArgumentOfTopGenericClass() {

@@ -8,7 +8,9 @@ import static com.intellij.psi.JavaTokenType.DOUBLE_KEYWORD;
 import static com.intellij.psi.JavaTokenType.EQ;
 import static com.intellij.psi.JavaTokenType.FINAL_KEYWORD;
 import static com.intellij.psi.JavaTokenType.FLOAT_KEYWORD;
+import static com.intellij.psi.JavaTokenType.GT;
 import static com.intellij.psi.JavaTokenType.IDENTIFIER;
+import static com.intellij.psi.JavaTokenType.IMPLEMENTS_KEYWORD;
 import static com.intellij.psi.JavaTokenType.INT_KEYWORD;
 import static com.intellij.psi.JavaTokenType.LONG_KEYWORD;
 import static com.intellij.psi.JavaTokenType.PRIVATE_KEYWORD;
@@ -28,6 +30,7 @@ import static com.intellij.psi.impl.source.tree.JavaElementType.CODE_BLOCK;
 import static com.intellij.psi.impl.source.tree.JavaElementType.DECLARATION_STATEMENT;
 import static com.intellij.psi.impl.source.tree.JavaElementType.EXPRESSION_LIST;
 import static com.intellij.psi.impl.source.tree.JavaElementType.FIELD;
+import static com.intellij.psi.impl.source.tree.JavaElementType.IMPLEMENTS_LIST;
 import static com.intellij.psi.impl.source.tree.JavaElementType.JAVA_CODE_REFERENCE;
 import static com.intellij.psi.impl.source.tree.JavaElementType.LAMBDA_EXPRESSION;
 import static com.intellij.psi.impl.source.tree.JavaElementType.METHOD;
@@ -35,10 +38,12 @@ import static com.intellij.psi.impl.source.tree.JavaElementType.MODIFIER_LIST;
 import static com.intellij.psi.impl.source.tree.JavaElementType.NEW_EXPRESSION;
 import static com.intellij.psi.impl.source.tree.JavaElementType.PARAMETER;
 import static com.intellij.psi.impl.source.tree.JavaElementType.PARAMETER_LIST;
+import static com.intellij.psi.impl.source.tree.JavaElementType.REFERENCE_PARAMETER_LIST;
 import static com.intellij.psi.impl.source.tree.JavaElementType.RETURN_STATEMENT;
 import static com.intellij.psi.impl.source.tree.JavaElementType.TYPE;
 import static org.dan.idea.charremap.composite.Any.any;
 import static org.dan.idea.charremap.composite.Backward.backward;
+import static org.dan.idea.charremap.composite.IsGeneric.isGeneric;
 import static org.dan.idea.charremap.composite.LastChild.lastChild;
 import static org.dan.idea.charremap.composite.LookAhead.lookAhead;
 import static org.dan.idea.charremap.composite.Maybe.maybe;
@@ -65,7 +70,8 @@ public class Matchers {
     private static final One O_METHOD = one(METHOD);
     private static final Or METHOD_OR_FIELD = or(O_FIELD, O_METHOD);
     private static final One O_PARAM_LIST = one(PARAMETER_LIST);
-    private static final Seq PAR_PAR_LIST_METHOD = seq(one(PARAMETER),
+    public static final One O_PARAM = one(PARAMETER);
+    private static final Seq PAR_PAR_LIST_METHOD = seq(O_PARAM,
             O_PARAM_LIST, O_METHOD);
     private static final One O_C_BLOCK = one(CODE_BLOCK);
     private static final Seq RETURN_CODE_METHOD = seq(one(RETURN_STATEMENT),
@@ -84,10 +90,12 @@ public class Matchers {
             one(LONG_KEYWORD));
     private static final One O_FILE = one(JAVA_FILE);
     private static final One O_RPARENTH = one(RPARENTH);
+    private static final One O_RBRACE = one(RBRACE);
+    private static final One O_ERROR = one(ERROR_ELEMENT);
 
     public static Matcher AT_MATCHER = seq(
             or(
-                    seq(one(RBRACE), ANONYMOUS, P_CLASS),
+                    seq(O_RBRACE, ANONYMOUS, P_CLASS),
                     seq(O_RPARENTH, O_PARAM_LIST, O_METHOD,
                             M_ANONYMOUS, P_CLASS),
                     seq(one(CLASS_KEYWORD), one(CLASS),
@@ -126,16 +134,25 @@ public class Matchers {
                                             O_METHOD, P_CLASS),
                                     seq(or(seq(O_MODIFIER_LIST, maybe(METHOD_OR_FIELD)),
                                             not(originNode(prevSibling(lastChild(
-                                                    backward(one(ERROR_ELEMENT), lookAhead(one(EQ)))))))),
+                                                    backward(O_ERROR, lookAhead(one(EQ)))))))),
                                             any(CLASS))))),
             O_FILE,
             not(prevChar(Character::isJavaIdentifierPart)));
 
     public static Matcher LESS_MATCHER = seq(
-//            or(
-            seq(WS, or(
-                    seq(O_C_BLOCK, O_METHOD),
-                    O_FIELD)),//),
+            or(
+                    seq(WS, maybe(or(
+                            seq(O_C_BLOCK, O_METHOD),
+                            O_FIELD,
+                            seq(O_PARAM, O_PARAM_LIST, O_METHOD))
+                    )),
+                    seq(one(GT), one(REFERENCE_PARAMETER_LIST), one(JAVA_CODE_REFERENCE),
+                            one(IMPLEMENTS_LIST),
+                            originNode(prevSibling(isGeneric()))),
+                    seq(one(STATIC_KEYWORD), O_MODIFIER_LIST),
+                    seq(O_RPARENTH, O_PARAM_LIST, O_METHOD, originNode(prevSibling(O_ERROR))),
+                    one(CLASS_KEYWORD),
+                    O_RBRACE),
             P_CLASS,
             O_FILE);
 }
