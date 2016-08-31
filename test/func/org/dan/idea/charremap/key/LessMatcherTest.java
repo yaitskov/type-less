@@ -41,11 +41,11 @@ public class LessMatcherTest extends BaseMatcherTest {
         checkYes(44, "public final class A {\n public static final \n}");
     }
 
-    public void testTopClassImplementsNestedList() {
+    public void topClassImplementsNestedList() {
         checkYes(51, "import java.util.List; class A implements List<List> {}");
     }
 
-    public void testTopClassImplementsMapCommaAfterFirstGenArg() {
+    public void topClassImplementsMapCommaAfterFirstGenArg() {
         checkYes(48, "import java.util.Map; class A implements Map<Map> {}");
     }
 
