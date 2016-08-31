@@ -9,8 +9,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 import java.util.Optional;
 
-import javax.xml.ws.Action;
-
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.DataContext;
